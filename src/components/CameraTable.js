@@ -7,10 +7,19 @@ function CameraTable() {
     // Fetch cameras data
     const fetchCameras = async () => {
       try {
-        const response = await fetch('/api/cameras');
+        const response = await fetch('http://localhost:8080/camera/all');
         if (response.ok) {
           const data = await response.json();
-          setCameras(data);
+          if(data.length > 0){
+            setCameras(data);
+          }
+          else{
+            return(
+              <div>
+                <h1>No cameras found</h1>
+              </div>
+            )
+          }
         }
       } catch (error) {
         console.error('Error fetching cameras:', error);

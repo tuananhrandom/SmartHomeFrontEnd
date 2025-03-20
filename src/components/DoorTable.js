@@ -7,10 +7,19 @@ function DoorTable() {
     // Fetch doors data
     const fetchDoors = async () => {
       try {
-        const response = await fetch('/api/doors');
+        const response = await fetch('http://localhost:8080/door/all');
         if (response.ok) {
           const data = await response.json();
-          setDoors(data);
+          if(data.length > 0){
+            setDoors(data);
+          }
+          else{
+            return(
+              <div>
+                <h1>No doors found</h1>
+              </div>
+            )
+          }
         }
       } catch (error) {
         console.error('Error fetching doors:', error);
@@ -118,7 +127,7 @@ function DoorTable() {
       {doors.map(door => (
         <div className="row" key={door.doorId} data-id={`door-${door.doorId}`}>
           <div id="door-logo" className="cell image">
-            <img src="/picture/door.png" alt="Door" />
+            <img src="door.png" alt="Door" />
           </div>
           <div id="door-name" className="cell">{door.doorName}</div>
           <div id="door-id" className="cell">ID: {door.doorId}</div>

@@ -34,6 +34,11 @@ body {
     display: flex;
     align-items: center;
 }
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
 
 .user-wrap {
     display: flex;
@@ -52,6 +57,7 @@ body {
 .notification {
     position: relative;
     cursor: pointer;
+
 }
 
 .bell::before {

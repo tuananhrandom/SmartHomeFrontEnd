@@ -4,13 +4,22 @@ function LightTable() {
   const [lights, setLights] = useState([]);
 
   useEffect(() => {
-    // Fetch lights data
+    // lấy về dữ liệu các đèn từ backend
     const fetchLights = async () => {
       try {
-        const response = await fetch('/api/lights');
+        const response = await fetch('http://localhost:8080/light/all');
         if (response.ok) {
           const data = await response.json();
-          setLights(data);
+          if(data.length > 0){
+           setLights(data);
+          }
+          else{
+            return(
+              <div>
+                <h1>No lights found</h1>
+              </div>
+            )
+          }
         }
       } catch (error) {
         console.error('Error fetching lights:', error);
@@ -94,7 +103,7 @@ function LightTable() {
       {lights.map(light => (
         <div className="row" key={light.lightId} data-id={`light-${light.lightId}`}>
           <div id="light-image" className="cell image">
-            <img src="/picture/light.png" alt="Light" />
+            <img src="light.png" alt="Light" />
           </div>
           <div id="light-name" className="cell">{light.lightName}</div>
           <div id="light-id" className="cell">ID: {light.lightId}</div>
