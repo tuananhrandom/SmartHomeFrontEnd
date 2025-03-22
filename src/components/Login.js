@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import '../styles/auth.css';
 
 const Login = () => {
@@ -54,7 +54,7 @@ const Login = () => {
         </button>
       </form>
       <p>
-        Chưa có tài khoản? <a href="/register">Đăng ký</a>
+        Chưa có tài khoản? <Link to="/register">Đăng ký</Link>
       </p>
     </div>
   );

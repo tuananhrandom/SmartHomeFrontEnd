@@ -78,20 +78,27 @@ const Dashboard = () => {
   );
 };
 
+// Định nghĩa AppRoutes bên trong AuthProvider
+const AppRoutes = () => {
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/dashboard" element={
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      } />
+      <Route path="/" element={<Navigate to="/dashboard" />} />
+    </Routes>
+  );
+};
+
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          } />
-          <Route path="/" element={<Navigate to="/dashboard" />} />
-        </Routes>
+        <AppRoutes />
       </Router>
     </AuthProvider>
   );

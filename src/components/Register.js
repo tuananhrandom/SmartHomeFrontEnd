@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import '../styles/auth.css';
 
 const Register = () => {
@@ -76,7 +76,7 @@ const Register = () => {
         </button>
       </form>
       <p>
-        Đã có tài khoản? <a href="/login">Đăng nhập</a>
+        Đã có tài khoản? <Link to="/login">Đăng nhập</Link>
       </p>
     </div>
   );

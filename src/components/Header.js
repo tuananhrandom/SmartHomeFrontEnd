@@ -3,7 +3,7 @@ import NotificationPopup from './NotificationPopup';
 import UserDetail from './UserDetail';
 import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import '../styles/header.css';
+
 import EditUserInfo from './EditUserInfo';
 import ChangePassword from './ChangePassword';
 
@@ -115,10 +115,14 @@ function Header() {
         <div className="user-info">
           <span className="username">{currentUser?.username}</span>
           <img className="user" src="user-profile.png" alt="User Profile" onClick={handleUserDetail} />
+          <button className="logout-button" onClick={handleLogout}>
+            Đăng xuất
+          </button>
         </div>
-        {/* <button className="logout-button" onClick={handleLogout}>
-          Đăng xuất
-        </button> */}
+        <div className="notification" ref={bellRef} onClick={toggleNotificationPopup}>
+          <span className="bell"></span>
+          <span className="dot"></span>
+        </div>
       </div>
 
       {/* Modal UserDetail */}
@@ -143,10 +147,7 @@ function Header() {
         onChangePassword={handlePasswordChange}
       />
 
-      <div className="notification" ref={bellRef} onClick={toggleNotificationPopup}>
-        <span className="bell"></span>
-        <span className="dot"></span>
-      </div>
+
       {showNotifications && (
         <NotificationPopup ref={notificationRef} />
       )}
