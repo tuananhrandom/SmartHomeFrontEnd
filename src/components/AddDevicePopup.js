@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-
+import { useAuth } from '../contexts/AuthContext';
 function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice }) {
   const [deviceType, setDeviceType] = useState(deviceTypes[0] || 'Light');
   const [deviceId, setDeviceId] = useState('');
   const [deviceName, setDeviceName] = useState('');
+  const { currentUser } = useAuth();
+  const currentUserId = currentUser.userId;
+  const userRole = currentUser.role;
 
   const handleSubmit = async () => {
     if (!deviceId || !deviceName) {
@@ -16,10 +19,17 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice }) {
 
     if (deviceType === 'Light') {
       data = {
-        lightId: deviceId,
+        lightId: Number(deviceId),
         lightName: deviceName
       };
-      endpoint = 'http://localhost:8080/light/newLight';
+      if(userRole === 'admin'){
+        //fetch về backend có @requestParam userId
+
+        endpoint = `http://localhost:8080/light/admin/newlight?userId=${currentUserId}`;
+      }
+      else{
+        endpoint = `http://localhost:8080/light/newlight?userId=${currentUserId}`;
+      }
     } else if (deviceType === 'Door') {
       data = {
         doorId: deviceId,
@@ -38,7 +48,8 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice }) {
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify(data)
       });

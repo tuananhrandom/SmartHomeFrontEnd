@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-
+import { useAuth } from '../contexts/AuthContext';
 function DoorTable() {
   const [doors, setDoors] = useState([]);
-
+  const { currentUser } = useAuth();
+  const currentUserId = currentUser.userId;
   useEffect(() => {
+    
     // Fetch doors data
     const fetchDoors = async () => {
       try {
-        const response = await fetch('http://localhost:8080/door/all');
+        const response = await fetch(`http://localhost:8080/door/${currentUserId}`);
         if (response.ok) {
           const data = await response.json();
           if(data.length > 0){

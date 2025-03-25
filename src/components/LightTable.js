@@ -1,10 +1,41 @@
 import React, { useState, useEffect } from 'react';
+import useWebSocket from '../hooks/useWebSocket';
+import { useAuth } from '../contexts/AuthContext';
 
 function LightTable() {
   const [lights, setLights] = useState([]);
+    // Sử dụng WebSocket để lắng nghe cập nhật về thiết bị đèn
+    const { isConnected, lastMessage, error: wsError } = useWebSocket({
+      autoConnect: true,
+      events: ['light-update']
+    });
+    const { currentUser } = useAuth();
+    const currentUserId = currentUser.userId;
 
   useEffect(() => {
     // lấy về dữ liệu các đèn từ backend
+    const fetchLights = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/light/${currentUserId}`);
+        if (response.ok) {
+          const data = await response.json();
+          if(data.length > 0){
+           setLights(data);
+          }
+          else{
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching lights:', error);
+      }
+    };
+
+    fetchLights();
+  }, []);
+  // khi có sự kiện light-update thì cập nhật lại danh sách đèn
+  useEffect(() => {
+    if (lastMessage && lastMessage.type === 'light-update') {
+      // lấy về dữ liệu các đèn từ backend
     const fetchLights = async () => {
       try {
         const response = await fetch('http://localhost:8080/light/all');
@@ -25,9 +56,9 @@ function LightTable() {
         console.error('Error fetching lights:', error);
       }
     };
-
-    fetchLights();
-  }, []);
+    fetchLights()
+    }
+  }, [lastMessage]);
 
   const handleToggleLight = async (light) => {
     const newStatus = light.lightStatus === 1 ? 0 : 1;
@@ -81,7 +112,7 @@ function LightTable() {
 
   const handleDeleteLight = async (lightId) => {
     try {
-      const response = await fetch(`/light/delete/${lightId}`, {
+      const response = await fetch(`/light/delete/user?userId=${currentUserId}&lightId=${lightId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'

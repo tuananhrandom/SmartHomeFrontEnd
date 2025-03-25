@@ -1,75 +1,120 @@
-import React from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import React, { useState, useEffect } from 'react';
 import '../styles/userDetail.css';
 
-function UserDetail({ isOpen, onClose }) {
-  const { currentUser } = useAuth();
+function UserDetail({ isOpen, onClose, onEditInfo, onChangePassword }) {
+  const [userData, setUserData] = useState(null);
+  const [userStats, setUserStats] = useState({
+    totalDevices: 0,
+    activeDevices: 0,
+    totalScenes: 0
+  });
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/auth/me', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (!response.ok) {
+          throw new Error('Không thể lấy thông tin người dùng');
+        }
+        const data = await response.json();
+        console.log(data);
+        setUserData(data);
+      } catch (error) {
+        console.error('Lỗi khi lấy thông tin người dùng:', error);
+      }
+    };
+
+    const fetchUserStats = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/users/stats', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (!response.ok) {
+          throw new Error('Không thể lấy thống kê người dùng');
+        }
+        const data = await response.json();
+        setUserStats(data);
+      } catch (error) {
+        console.error('Lỗi khi lấy thống kê:', error);
+      }
+    };
+
+    if (isOpen) {
+      fetchUserData();
+      fetchUserStats();
+    }
+  }, [isOpen]);
+
+  if (!isOpen || !userData) return null;
 
   return (
-    <>
-      <div className="modal-overlay" onClick={onClose}></div>
+    <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">
           <h2>Thông tin người dùng</h2>
-          <button className="close-button" onClick={onClose}>✖</button>
+          <button className="close-button" onClick={onClose}>×</button>
         </div>
         <div className="modal-body">
           <div className="user-info">
             <div className="info-group">
               <label>Tên đăng nhập:</label>
-              <span>{currentUser?.username}</span>
+              <span>{userData.username}</span>
             </div>
             <div className="info-group">
               <label>Email:</label>
-              <span>{currentUser?.email}</span>
+              <span>{userData.email}</span>
             </div>
             <div className="info-group">
-              <label>Họ tên:</label>
-              <span>{currentUser?.fullName}</span>
+              <label>Họ và tên:</label>
+              <span>{userData.fullName}</span>
             </div>
             <div className="info-group">
               <label>Ngày tạo tài khoản:</label>
-              <span>{new Date(currentUser?.createdAt).toLocaleDateString('vi-VN')}</span>
+              <span>{new Date(userData.createdAt).toLocaleDateString('vi-VN')}</span>
             </div>
             <div className="info-group">
               <label>Vai trò:</label>
-              <span>{currentUser?.role}</span>
+              <span>{userData.role}</span>
             </div>
           </div>
           <div className="user-stats">
             <h3>Thống kê</h3>
             <div className="stats-grid">
               <div className="stat-item">
-                <span className="stat-value">{currentUser?.deviceCount || 0}</span>
-                <span className="stat-label">Thiết bị</span>
+                <span className="stat-value">{userData.lights.length+userData.doors.length+userData.cameras.length}</span>
+                <span className="stat-label">Tổng thiết bị</span>
               </div>
               <div className="stat-item">
-                <span className="stat-value">{currentUser?.lightCount || 0}</span>
+                <span className="stat-value">{userData.lights.length}</span>
                 <span className="stat-label">Đèn</span>
               </div>
               <div className="stat-item">
-                <span className="stat-value">{currentUser?.doorCount || 0}</span>
+                <span className="stat-value">{userData.doors.length}</span>
                 <span className="stat-label">Cửa</span>
               </div>
               <div className="stat-item">
-                <span className="stat-value">{currentUser?.cameraCount || 0}</span>
+                <span className="stat-value">{userData.cameras.length}</span>
                 <span className="stat-label">Camera</span>
               </div>
             </div>
           </div>
         </div>
         <div className="modal-footer">
-          <button className="edit-button" onClick={() => {/* Xử lý chỉnh sửa thông tin */}}>
+          <button className="edit-button" onClick={onEditInfo}>
             Chỉnh sửa thông tin
           </button>
-          <button className="change-password-button" onClick={() => {/* Xử lý đổi mật khẩu */}}>
+          <button className="change-password-button" onClick={onChangePassword}>
             Đổi mật khẩu
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
