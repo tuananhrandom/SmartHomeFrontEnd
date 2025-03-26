@@ -112,7 +112,7 @@ function LightTable() {
 
   const handleDeleteLight = async (lightId) => {
     try {
-      const response = await fetch(`/light/delete/user?userId=${currentUserId}&lightId=${lightId}`, {
+      const response = await fetch(`localhost/light/delete/user?userId=${currentUserId}&lightId=${lightId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
