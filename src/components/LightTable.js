@@ -38,7 +38,7 @@ function LightTable() {
       // lấy về dữ liệu các đèn từ backend
     const fetchLights = async () => {
       try {
-        const response = await fetch('http://localhost:8080/light/all');
+        const response = await fetch(`http://localhost:8080/light/${currentUserId}`);
         if (response.ok) {
           const data = await response.json();
           if(data.length > 0){
@@ -64,8 +64,8 @@ function LightTable() {
     const newStatus = light.lightStatus === 1 ? 0 : 1;
     
     try {
-      const response = await fetch(`/light/toggle/${light.lightId}/${newStatus}`, {
-        method: 'POST',
+      const response = await fetch(`http://localhost:8080/light/toggle?lightId=${Number(light.lightId)}&userId=${Number(currentUserId)}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         }
@@ -88,8 +88,8 @@ function LightTable() {
 
   const handleRefreshLight = async (lightId) => {
     try {
-      const response = await fetch(`/light/refresh/${lightId}`, {
-        method: 'POST',
+      const response = await fetch(`http://localhost:8080/light/${currentUserId}`, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json'
         }
@@ -97,11 +97,7 @@ function LightTable() {
 
       if (response.ok) {
         const updatedLight = await response.json();
-        setLights(prevLights => 
-          prevLights.map(light => 
-            light.lightId === lightId ? updatedLight : light
-          )
-        );
+        setLights(updatedLight);
       } else {
         console.error('Error refreshing light');
       }
@@ -112,7 +108,7 @@ function LightTable() {
 
   const handleDeleteLight = async (lightId) => {
     try {
-      const response = await fetch(`localhost/light/delete/user?userId=${currentUserId}&lightId=${lightId}`, {
+      const response = await fetch(`http://localhost:8080/light/delete/user?userId=${currentUserId}&lightId=${lightId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
