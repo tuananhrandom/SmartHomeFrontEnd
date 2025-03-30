@@ -59,7 +59,7 @@ function DoorTable() {
 
   const handleRefreshDoor = async (doorId) => {
     try {
-      const response = await fetch(`/door/refresh/${doorId}`, {
+      const response = await fetch(`http://localhost:8080/door/${currentUserId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

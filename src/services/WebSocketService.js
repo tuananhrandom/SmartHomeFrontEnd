@@ -4,6 +4,8 @@ class WebSocketService {
     this.isConnected = false;
     this.listeners = {
       'light-update': [],
+      'door-update':[],
+      'camera-update':[],
       'connect': [],
       'disconnect': [],
       'error': []
