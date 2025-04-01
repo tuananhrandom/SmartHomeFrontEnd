@@ -32,10 +32,18 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice }) {
       }
     } else if (deviceType === 'Door') {
       data = {
-        doorId: deviceId,
+        doorId: Number(deviceId),
         doorName: deviceName
+        
       };
-      endpoint = 'http://localhost:8080/door/newDoor';
+      if(userRole === 'admin'){
+        //fetch về backend có @requestParam userId
+
+        endpoint = `http://localhost:8080/door/admin/newdoor?userId=${currentUserId}`;
+      }
+      else{
+        endpoint = `http://localhost:8080/door/newdoor?userId=${currentUserId}`;
+      }
     } else if (deviceType === 'Camera') {
       data = {
         cameraId: deviceId,

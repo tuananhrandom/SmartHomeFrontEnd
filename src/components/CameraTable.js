@@ -77,7 +77,7 @@ function CameraTable() {
       {cameras.map(camera => (
         <div className="row" key={camera.cameraId} data-id={`camera-${camera.cameraId}`}>
           <div className="cell image">
-            <img src="/picture/camera.png" alt="Camera" />
+            <img src="camera.png" alt="Camera" />
           </div>
           <div className="cell">{camera.cameraName}</div>
           <div className="cell">ID: {camera.cameraId}</div>

@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import useWebSocket from '../hooks/useWebSocket';
 function DoorTable() {
   const [doors, setDoors] = useState([]);
   const { currentUser } = useAuth();
   const currentUserId = currentUser.userId;
+      // Sử dụng WebSocket để lắng nghe cập nhật về thiết bị đèn
+      const { isConnected, lastMessage, error: wsError } = useWebSocket({
+        autoConnect: true,
+        events: ['door-update']
+      });
+
   useEffect(() => {
     
     // Fetch doors data
@@ -30,13 +37,40 @@ function DoorTable() {
 
     fetchDoors();
   }, []);
+  // khi có sự kiện light-update thì cập nhật lại danh sách đèn
+  useEffect(() => {
+    if (lastMessage && lastMessage.type === 'door-update') {
+      // lấy về dữ liệu các đèn từ backend
+    const fetchLights = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/door/${currentUserId}`);
+        if (response.ok) {
+          const data = await response.json();
+          if(data.length > 0){
+           setDoors(data);
+          }
+          else{
+            return(
+              <div>
+                <h1>No doors found</h1>
+              </div>
+            )
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching lights:', error);
+      }
+    };
+    fetchLights()
+    }
+  }, [lastMessage]);
 
   const handleToggleAlert = async (door) => {
     const newLockDown = door.doorLockDown === 1 ? 0 : 1;
     
     try {
-      const response = await fetch(`/door/toggleAlert/${door.doorId}/${newLockDown}`, {
-        method: 'POST',
+      const response = await fetch(`http://localhost:8080/door/toggle?doorId=${door.doorId}&userId=${currentUserId}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         }
@@ -107,7 +141,7 @@ function DoorTable() {
 
   const handleDeleteDoor = async (doorId) => {
     try {
-      const response = await fetch(`/door/delete/${doorId}`, {
+      const response = await fetch(`http://localhost:8080/door/user/delete?doorId=${doorId}&userId=${currentUserId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
