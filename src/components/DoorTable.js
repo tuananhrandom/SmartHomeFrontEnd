@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import useWebSocket from '../hooks/useWebSocket';
+import EditDevicePopup from './EditDevicePopup';
 function DoorTable() {
+  const deviceType = 'Door';
+  const [isOpenEditPopup, setIsOpenEditPopup] = useState(false);
   const [doors, setDoors] = useState([]);
   const { currentUser } = useAuth();
+  const [selectedDoorId, setSelectedDoorId] = useState('');
   const currentUserId = currentUser.userId;
       // Sử dụng WebSocket để lắng nghe cập nhật về thiết bị đèn
       const { isConnected, lastMessage, error: wsError } = useWebSocket({
@@ -11,6 +15,14 @@ function DoorTable() {
         events: ['door-update']
       });
 
+      // xử lý mở popup edit
+      const handleEditPopup = (doorId) => {
+        setIsOpenEditPopup(true);
+        setSelectedDoorId(doorId);
+      };
+      const handleClosePopup = () => {
+      setIsOpenEditPopup(false);
+      };
   useEffect(() => {
     
     // Fetch doors data
@@ -37,7 +49,7 @@ function DoorTable() {
 
     fetchDoors();
   }, []);
-  // khi có sự kiện light-update thì cập nhật lại danh sách đèn
+  // khi có sự kiện door-update thì cập nhật lại danh sách đèn
   useEffect(() => {
     if (lastMessage && lastMessage.type === 'door-update') {
       // lấy về dữ liệu các đèn từ backend
@@ -165,8 +177,9 @@ function DoorTable() {
           <div id="door-logo" className="cell image">
             <img src="door.png" alt="Door" />
           </div>
-          <div id="door-name" className="cell">{door.doorName}</div>
-          {door.doorName != null && <button className='cell edit' >✍🏻</button>}
+          <div id="door-name" className="cell">{door.doorName}
+          {door.doorName != null && <button className='cell edit' onClick={()=>handleEditPopup(door.doorId)} >✍🏻</button>}
+          </div>
           <div id="door-id" className="cell">ID: {door.doorId}</div>
           <div id="door-ip" className="cell ip">IP: {door.doorIp}</div>
           <div id="door-status" className="cell status">
@@ -232,6 +245,14 @@ function DoorTable() {
           </div>
         </div>
       ))}
+      <EditDevicePopup
+        isOpen={isOpenEditPopup}
+        onClose={handleClosePopup}
+        deviceType={deviceType}
+        onAddDevice={deviceType}
+        deviceId={selectedDoorId}
+
+      />
     </div>
   );
 }

@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice }) {
-  const [deviceType, setDeviceType] = useState(deviceTypes[0] || 'Light');
+
+function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDeviceType }) {
+  const [deviceType, setDeviceType] = useState(currentDeviceType || deviceTypes[0] || 'Light');
   const [deviceId, setDeviceId] = useState('');
   const [deviceName, setDeviceName] = useState('');
   const { currentUser } = useAuth();
   const currentUserId = currentUser.userId;
   const userRole = currentUser.role;
+
+  // Reset deviceType khi currentDeviceType thay đổi
+  React.useEffect(() => {
+    if (currentDeviceType) {
+      setDeviceType(currentDeviceType);
+    }
+  }, [currentDeviceType]);
 
   const handleSubmit = async () => {
     if (!deviceId || !deviceName) {

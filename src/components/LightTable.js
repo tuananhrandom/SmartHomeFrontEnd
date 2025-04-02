@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import useWebSocket from '../hooks/useWebSocket';
 import { useAuth } from '../contexts/AuthContext';
+import EditDevicePopup from './EditDevicePopup';
 
 function LightTable() {
+  const deviceType = 'Light';
+  const [selectedLightId, setSelectedLightId] = useState('')
+  
   const [lights, setLights] = useState([]);
     // Sử dụng WebSocket để lắng nghe cập nhật về thiết bị đèn
     const { isConnected, lastMessage, error: wsError } = useWebSocket({
@@ -11,6 +15,14 @@ function LightTable() {
     });
     const { currentUser } = useAuth();
     const currentUserId = currentUser.userId;
+    const [isOpenEditPopup, setIsOpenEditPopup] = useState(false);
+    const handleEditPopup = (lightId) => {
+      setIsOpenEditPopup(true);
+      setSelectedLightId(lightId);
+    }
+    const handleClosePopup = () => {
+      setIsOpenEditPopup(false);
+    };
 
   useEffect(() => {
     // lấy về dữ liệu các đèn từ backend
@@ -132,8 +144,10 @@ function LightTable() {
           <div id="light-image" className="cell image">
             <img src="light.png" alt="Light" />
           </div>
-          <div id="light-name" className="cell">{light.lightName}</div>
-          {light.lightName != null && <button className='cell edit' >✍🏻</button>}
+          <div id="light-name" className="cell">{light.lightName}
+          {light.lightName != null && <button className='cell edit' onClick={()=> handleEditPopup(light.lightId)}>✍🏻</button>}
+          </div>
+          
           <div id="light-id" className="cell">ID: {light.lightId}</div>
           <div id="light-ip" className="cell ip">IP: {light.lightIp}</div>
           <div id="light-status" className="cell status">
@@ -181,8 +195,17 @@ function LightTable() {
           </div>
         </div>
       ))}
+      <EditDevicePopup
+        isOpen={isOpenEditPopup}
+        onClose={handleClosePopup}
+        deviceType={deviceType}
+        onAddDevice={deviceType}
+        deviceId={selectedLightId}
+
+      />
     </div>
   );
+
 }
 
 export default LightTable; 
