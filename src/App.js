@@ -32,6 +32,7 @@ const Dashboard = () => {
   const [selectedDevice, setSelectedDevice] = useState('Light');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const deviceTypes = ['Light', 'Door', 'Camera'];
+  const [setCurrentDeviceType, currentDeviceType] = useState('')
 
   const handleDeviceChange = (device) => {
     setSelectedDevice(device);

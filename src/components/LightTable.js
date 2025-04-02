@@ -133,6 +133,7 @@ function LightTable() {
             <img src="light.png" alt="Light" />
           </div>
           <div id="light-name" className="cell">{light.lightName}</div>
+          {light.lightName != null && <button className='cell edit' >✍🏻</button>}
           <div id="light-id" className="cell">ID: {light.lightId}</div>
           <div id="light-ip" className="cell ip">IP: {light.lightIp}</div>
           <div id="light-status" className="cell status">

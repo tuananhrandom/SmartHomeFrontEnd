@@ -80,6 +80,7 @@ function CameraTable() {
             <img src="camera.png" alt="Camera" />
           </div>
           <div className="cell">{camera.cameraName}</div>
+          {camera.cameraName != null && <button className='cell edit' >✍🏻</button>}
           <div className="cell">ID: {camera.cameraId}</div>
           <div className="cell ip">IP: {camera.cameraIp}</div>
           <div className="cell status">

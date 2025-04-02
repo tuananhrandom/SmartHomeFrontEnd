@@ -166,6 +166,7 @@ function DoorTable() {
             <img src="door.png" alt="Door" />
           </div>
           <div id="door-name" className="cell">{door.doorName}</div>
+          {door.doorName != null && <button className='cell edit' >✍🏻</button>}
           <div id="door-id" className="cell">ID: {door.doorId}</div>
           <div id="door-ip" className="cell ip">IP: {door.doorIp}</div>
           <div id="door-status" className="cell status">
