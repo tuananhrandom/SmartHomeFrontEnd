@@ -17,9 +17,17 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDevi
   }, [currentDeviceType]);
 
   const handleSubmit = async () => {
-    if (!deviceId || !deviceName) {
-      alert('Please fill in all fields');
-      return;
+    if (userRole != 'ADMIN') {
+      
+      if (!deviceId || !deviceName) {
+        alert('Please fill in all fields');
+        return;
+      }
+    } else {
+      if (!deviceId) {
+        alert('Please fill in all fields');
+        return;
+      }
     }
 
     let data = {};
@@ -30,10 +38,10 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDevi
         lightId: Number(deviceId),
         lightName: deviceName
       };
-      if(userRole === 'admin'){
+      if(userRole === 'ADMIN'){
         //fetch về backend có @requestParam userId
 
-        endpoint = `http://localhost:8080/light/admin/newlight?userId=${currentUserId}`;
+        endpoint = `http://localhost:8080/light/admin/newlight?lightId=${deviceId}`;
       }
       else{
         endpoint = `http://localhost:8080/light/newlight?userId=${currentUserId}`;
@@ -44,10 +52,10 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDevi
         doorName: deviceName
         
       };
-      if(userRole === 'admin'){
+      if(userRole === 'ADMIN'){
         //fetch về backend có @requestParam userId
 
-        endpoint = `http://localhost:8080/door/admin/newdoor?userId=${currentUserId}`;
+        endpoint = `http://localhost:8080/door/admin/newdoor?doorId=${deviceId}`;
       }
       else{
         endpoint = `http://localhost:8080/door/newdoor?userId=${currentUserId}`;
@@ -57,7 +65,14 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDevi
         cameraId: deviceId,
         cameraName: deviceName
       };
-      endpoint = 'http://localhost:8080/camera/newCamera';
+      if(userRole === 'ADMIN'){
+        //fetch về backend có @requestParam userId
+
+        endpoint = `http://localhost:8080/camera/admin/newcamera?cameraId=${deviceId}`;
+      }
+      else{
+        endpoint = `http://localhost:8080/camera/newcamera?userId=${currentUserId}`;
+      }
     }
 
     try {
@@ -116,13 +131,9 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDevi
               value={deviceId}
               onChange={(e) => setDeviceId(e.target.value)}
             />
-            <input 
-              type="text" 
-              id="deviceName" 
-              placeholder="Device Name"
-              value={deviceName}
-              onChange={(e) => setDeviceName(e.target.value)}
-            />
+            {userRole != 'ADMIN' && <input type="text" id="deviceName" placeholder="Device Name"value={deviceName}onChange={(e) => setDeviceName(e.target.value)}
+            />}
+
           </div>
           <div className="popup-footer">
             <button id="cancelButton" onClick={onClose}>Cancel</button>

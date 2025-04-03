@@ -148,6 +148,12 @@ body {
     background: #B2D1D6; /* Màu nền của đường ray */
     border-radius: 10px; /* Làm tròn góc của đường ray */
 }
+.finder{
+    border-radius: 20px;
+    
+    width: 100%;
+    height: 70%;
+}
 
 .row {
     display: flex;

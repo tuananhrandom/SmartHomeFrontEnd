@@ -17,9 +17,20 @@ const Login = () => {
     try {
       setError('');
       setLoading(true);
-      await login(username, password);
-      navigate('/dashboard');
+      const userData = await login(username, password);
+      
+      console.log('User data after login:', userData); // Debug log
+      
+      // Chuyển hướng dựa trên role của người dùng
+      if (userData && userData.role && userData.role.toUpperCase() === 'ADMIN') {
+        console.log('Redirecting to admin page'); // Debug log
+        navigate('/admin');
+      } else {
+        console.log('Redirecting to dashboard'); // Debug log
+        navigate('/dashboard');
+      }
     } catch (error) {
+      console.error('Login error:', error); // Debug log
       setError(error.message || 'Đăng nhập thất bại');
     } finally {
       setLoading(false);
@@ -38,6 +49,7 @@ const Login = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
+            placeholder="Nhập tên đăng nhập"
           />
         </div>
         <div className="form-group">
@@ -47,6 +59,7 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            placeholder="Nhập mật khẩu"
           />
         </div>
         <button type="submit" disabled={loading}>

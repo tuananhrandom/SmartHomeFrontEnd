@@ -9,35 +9,20 @@ import AddDevicePopup from './components/AddDevicePopup';
 import Footer from './components/Footer';
 import Login from './components/Login';
 import Register from './components/Register';
+import AdminDashboard from './components/AdminDashboard';
 import { AuthProvider } from './contexts/AuthContext';
 import { useAuth } from './contexts/AuthContext';
-
-// Bảo vệ route yêu cầu đăng nhập
-const ProtectedRoute = ({ children }) => {
-  const { currentUser, loading } = useAuth();
-  
-  if (loading) {
-    return <div>Đang tải...</div>;
-  }
-  
-  if (!currentUser) {
-    return <Navigate to="/login" />;
-  }
-  
-  return children;
-};
 
 // Component Dashboard chứa nội dung chính của ứng dụng
 const Dashboard = () => {
   const [selectedDevice, setSelectedDevice] = useState('Light');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const deviceTypes = ['Light', 'Door', 'Camera'];
-  const [currentDeviceType, setCurrentDeviceType] = useState('Light')
+  const [currentDeviceType, setCurrentDeviceType] = useState('Light');
 
   const handleDeviceChange = (device) => {
     setSelectedDevice(device);
     setCurrentDeviceType(device);
-
   };
 
   const handleAddDevice = () => {
@@ -82,18 +67,48 @@ const Dashboard = () => {
   );
 };
 
-// Định nghĩa AppRoutes bên trong AuthProvider
+// Component chứa các routes
 const AppRoutes = () => {
+  const { currentUser, loading } = useAuth();
+
+  if (loading) {
+    return <div>Đang tải...</div>;
+  }
+
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={
-        <ProtectedRoute>
-          <Dashboard />
-        </ProtectedRoute>
-      } />
-      <Route path="/" element={<Navigate to="/dashboard" />} />
+      <Route
+        path="/dashboard"
+        element={
+          currentUser ? (
+            <Dashboard />
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          currentUser?.role === 'ADMIN' ? (
+            <AdminDashboard />
+          ) : (
+            <Navigate to="/dashboard" />
+          )
+        }
+      />
+      <Route
+        path="/"
+        element={
+          currentUser ? (
+            <Navigate to={currentUser.role === 'ADMIN' ? '/admin' : '/dashboard'} />
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
     </Routes>
   );
 };
