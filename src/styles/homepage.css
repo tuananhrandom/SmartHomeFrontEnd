@@ -188,6 +188,13 @@ body {
     margin-left: 5%;
     
 }
+.cell.action{
+    display: flex;
+    gap: 20px;
+}
+.cell.warning{
+    margin-left: 8px;
+}
 
 .status {
     color: #000;
@@ -195,10 +202,20 @@ body {
 
 .status-on {
     color: #ff5252;
+    transition:all 0.2;
+}
+.status-on:hover {
+    color: #c43f3f;
+    transform: 1.2;
 }
 
 .status-off {
     color: #009688;
+    transition:all 0.2;
+}
+.status-off:hover {
+    color: #006e63;
+    transform: 1.2;
 }
 
 .action-button, .delete-button {
@@ -231,8 +248,14 @@ body {
 }
 
 .action-button.check {
-    visibility: hidden; /* Mặc định ẩn nút check */
+    visibility: visible; /* Mặc định ẩn nút check */
     margin-left: 20px;
+    background-color: #B2D1D6;
+    transition: all 0.2s;
+}
+.action-button.check:hover{
+    transform: scale(1.2);
+    background-color:#8da8ac ;
 }
 
 .delete-button {
@@ -242,16 +265,31 @@ body {
 .turn-off {
     background-color: #ff5252;
     color: #ffffff;
+    transition: all 0.2s ;
+}
+.turn-off:hover {
+    background-color: #d14141;
+    transform: scale(1.2);
 }
 
 .turn-on {
     background-color: #009688;
     color: #ffffff;
+    transition: all 0.2s;
+}
+.turn-on:hover {
+    background-color: #006e63;
+    transform: scale(1.2);
 }
 
 .refresh {
     background-color: #ff5252;
     color: #ffffff;
+    transition: all 0.2s;
+}
+.refresh:hover {
+    background-color: #d14141;
+    transform: scale(1.2);
 }
 
 /* Overlay background */

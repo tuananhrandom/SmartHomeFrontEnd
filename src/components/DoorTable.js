@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import useWebSocket from '../hooks/useWebSocket';
 import EditDevicePopup from './EditDevicePopup';
+import SchedulePopup from './SchedulePopup';
 function DoorTable() {
   const deviceType = 'Door';
+  const[isOpenSchedulePopup, setIsOpenSchedulePopup] = useState(false);
   const [isOpenEditPopup, setIsOpenEditPopup] = useState(false);
   const [doors, setDoors] = useState([]);
   const { currentUser } = useAuth();
@@ -22,6 +24,7 @@ function DoorTable() {
       };
       const handleClosePopup = () => {
       setIsOpenEditPopup(false);
+      setIsOpenSchedulePopup(false);
       };
   useEffect(() => {
     
@@ -76,6 +79,10 @@ function DoorTable() {
     fetchLights()
     }
   }, [lastMessage]);
+  const handleSchedulePopup=(doorId) => {
+    setIsOpenSchedulePopup(true);
+    setSelectedDoorId(doorId);
+  }
 
   const handleToggleAlert = async (door) => {
     const newLockDown = door.doorLockDown === 1 ? 0 : 1;
@@ -129,8 +136,8 @@ function DoorTable() {
 
   const handleCheckDoor = async (doorId) => {
     try {
-      const response = await fetch(`/door/check/${doorId}`, {
-        method: 'POST',
+      const response = await fetch(`http://localhost:8080/door/check/${doorId}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         }
@@ -222,18 +229,40 @@ function DoorTable() {
                 ⟳
               </button>
             )}
+            {door.doorStatus === null && (
+              <button 
+                className="schedule-button"
+                onClick={() => handleSchedulePopup(door.doorId)}
+                title="Đặt lịch trình"
+                disabled
+              >
+                🕒
+              </button>
+            )}
+              {door.doorStatus != null && (
+              <button 
+                className="schedule-button"
+                onClick={() => handleSchedulePopup(door.doorId)}
+                title="Đặt lịch trình"
+              >
+                🕒
+              </button>
+              )}
           </div>
-          <div id="door-warning" className={`cell warning ${door.doorWarning ? 'warning-blink' : ''}`} data-value={door.doorWarning ? 1 : 0}>
+          <div id="door-warning" className={`cell warning ${door.doorAlert ? 'warning-blink' : ''}`} data-value={door.doorAlert ? 1 : 0}>
             <span>⚠️</span>
           </div>
+
           <div className="cell action">
+          {door.doorAlert === 1 &&(
             <button 
               className="action-button check" 
               id="check-btn"
               onClick={() => handleCheckDoor(door.doorId)}
             >
-              Check
+              OK
             </button>
+          )}
           </div>
           <div id="door-delete" className="cell delete">
             <button 
@@ -252,6 +281,13 @@ function DoorTable() {
         onAddDevice={deviceType}
         deviceId={selectedDoorId}
 
+      />
+      <SchedulePopup 
+        isOpen={isOpenSchedulePopup}
+        onClose={handleClosePopup}
+        deviceType={deviceType}
+        deviceId={selectedDoorId}
+        userId={currentUserId}
       />
     </div>
   );

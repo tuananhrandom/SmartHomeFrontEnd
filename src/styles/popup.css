@@ -1,0 +1,246 @@
+/* Schedule Popup Styles */
+.schedule-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1002;
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  height: 70%;
+  overflow-y: auto;  
+}
+
+.schedule-popup-content {
+
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  padding: 0;
+  overflow: hidden;
+  z-index: 1003;
+  width: 100%;
+  height: 100%;
+  display: block;
+
+  
+}
+
+.schedule-popup .popup-header {
+  background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+
+.schedule-popup .popup-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.schedule-popup .close-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.schedule-popup .popup-body {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.schedule-form, .schedule-list {
+  background-color: #f5f8ff;
+  border-radius: 6px;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-form h3, .schedule-list h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #3a7bd5;
+  border-bottom: 1px solid #d8e4ff;
+  padding-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #555;
+}
+
+.form-group input[type="time"],
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.days-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.day-button {
+  background-color: #e6e6e6;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.day-button.active {
+  background-color: #3a7bd5;
+  color: white;
+}
+
+.add-schedule-button {
+  background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  display: block;
+  width: 100%;
+  margin-top: 15px;
+  transition: transform 0.2s;
+}
+
+.add-schedule-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.schedule-item {
+  background-color: white;
+  border-radius: 6px;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s;
+  border-left: 3px solid #3a7bd5;
+}
+
+.schedule-item.inactive {
+  opacity: 0.7;
+  border-left-color: #888;
+}
+
+.schedule-info {
+  flex: 1;
+}
+
+.schedule-time {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.schedule-action {
+  display: inline-block;
+  background-color: #e8f4ff;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-right: 8px;
+  font-size: 14px;
+  color: #3a7bd5;
+}
+
+.schedule-days {
+  font-size: 14px;
+  color: #666;
+  margin-top: 5px;
+}
+
+.schedule-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.toggle-button, .delete-button {
+  background: none;
+  border: 1px solid #ddd;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggle-button.active {
+  background-color: #4caf50;
+  color: white;
+  border-color: #4caf50;
+}
+
+.toggle-button:not(.active) {
+  background-color: #f44336;
+  color: white;
+  border-color: #f44336;
+}
+
+.delete-button {
+  background-color: #ff5252;
+  color: white;
+  border-color: #ff5252;
+}
+
+.toggle-button:hover, .delete-button:hover {
+  transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .schedule-popup .popup-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Customize the schedule button in LightTable */
+.schedule-button {
+  background-color: #c2e7ec;
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  margin-right: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.schedule-button:hover {
+  background-color: #85a0a7;
+  transform: scale(1.1);
+} 

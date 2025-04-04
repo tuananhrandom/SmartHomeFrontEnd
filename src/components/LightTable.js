@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import useWebSocket from '../hooks/useWebSocket';
 import { useAuth } from '../contexts/AuthContext';
 import EditDevicePopup from './EditDevicePopup';
+import SchedulePopup from './SchedulePopup';
 
 function LightTable() {
   const deviceType = 'Light';
@@ -16,12 +17,22 @@ function LightTable() {
     const { currentUser } = useAuth();
     const currentUserId = currentUser.userId;
     const [isOpenEditPopup, setIsOpenEditPopup] = useState(false);
+    const [isOpenSchedulePopup, setIsOpenSchedulePopup] = useState(false);
+    
     const handleEditPopup = (lightId) => {
       setIsOpenEditPopup(true);
       setSelectedLightId(lightId);
     }
+    
+    const handleSchedulePopup = (lightId) => {
+      console.log('Schedule popup triggered for light:', lightId);
+      setIsOpenSchedulePopup(true);
+      setSelectedLightId(lightId);
+    }
+    
     const handleClosePopup = () => {
       setIsOpenEditPopup(false);
+      setIsOpenSchedulePopup(false);
     };
 
   useEffect(() => {
@@ -184,6 +195,25 @@ function LightTable() {
                 ⟳
               </button>
             )}
+            {light.lightStatus === null && (
+              <button 
+                className="schedule-button"
+                onClick={() => handleSchedulePopup(light.lightId)}
+                title="Đặt lịch trình"
+                disabled
+              >
+                🕒
+              </button>
+            )}
+              {light.lightStatus != null && (
+              <button 
+                className="schedule-button"
+                onClick={() => handleSchedulePopup(light.lightId)}
+                title="Đặt lịch trình"
+              >
+                🕒
+              </button>
+              )}
           </div>
           <div id="light-delete" className="cell delete">
             <button 
@@ -199,9 +229,14 @@ function LightTable() {
         isOpen={isOpenEditPopup}
         onClose={handleClosePopup}
         deviceType={deviceType}
-        onAddDevice={deviceType}
         deviceId={selectedLightId}
-
+      />
+      <SchedulePopup
+        isOpen={isOpenSchedulePopup}
+        onClose={handleClosePopup}
+        deviceType={deviceType}
+        deviceId={selectedLightId}
+        userId={currentUserId}
       />
     </div>
   );

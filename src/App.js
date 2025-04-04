@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './styles/homepage.css';
 import './styles/notification-popup.css';
+import './styles/popup.css';
 import Header from './components/Header';
 import DeviceSelector from './components/DeviceSelector';
 import DeviceTable from './components/DeviceTable';
