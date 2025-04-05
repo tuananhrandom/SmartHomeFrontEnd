@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../styles/cameraView.css';
 
-const CameraView = ({ cameraId }) => {
+const CameraView = ({ cameraId, isOpen, OnClose }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState(null);
   const videoRef = useRef(null);
   const wsRef = useRef(null);
+  
 
   useEffect(() => {
     // Khởi tạo kết nối WebSocket
-    const ws = new WebSocket(`ws://localhost:8080/camera/stream/${cameraId}`);
+    const ws = new WebSocket(`ws://localhost:8080/ws/camera/livecamera`);
     wsRef.current = ws;
 
     ws.onopen = () => {
@@ -54,11 +55,11 @@ const CameraView = ({ cameraId }) => {
     setIsConnected(false);
     setError(null);
   };
-
+  if (!isOpen) return null;
   return (
     <div className="camera-view-container">
       <div className="camera-header">
-        <h2>Camera View - ID: {cameraId}</h2>
+        <h2>Camera View - ID: </h2>
         <div className="camera-status">
           <span className={`status-indicator ${isConnected ? 'connected' : 'disconnected'}`}>
             {isConnected ? 'Đã kết nối' : 'Đang kết nối...'}

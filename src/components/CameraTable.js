@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import CameraView from './CameraView';
 
 function CameraTable() {
   const [cameras, setCameras] = useState([]);
+  const [isOpenCameraView,setIsOpenCameraView] = useState(false);
 
+  const handleOpenCameraView = () =>{
+    setIsOpenCameraView(true);
+  }
+  const handleClosePopup = () => {
+    setIsOpenCameraView(false)
+  };
   useEffect(() => {
+
     // Fetch cameras data
     const fetchCameras = async () => {
       try {
@@ -97,10 +106,11 @@ function CameraTable() {
                 ⟳
               </button>
             )}
-            {camera.cameraStatus === 1 && (
+            {camera.cameraStatus === null && (
               <button 
                 className="action-button"
-                onClick={() => window.open(`/camera/view/${camera.cameraId}`, '_blank')}
+                // onClick={() => window.open(`/camera/view/${camera.cameraId}`, '_blank')}
+                onClick={handleOpenCameraView}
               >
                 View
               </button>
@@ -116,7 +126,12 @@ function CameraTable() {
           </div>
         </div>
       ))}
+      <CameraView
+      isOpen={isOpenCameraView}
+      OnClose={handleClosePopup}
+      />
     </div>
+    
   );
 }
 
