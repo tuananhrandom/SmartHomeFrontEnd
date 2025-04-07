@@ -47,7 +47,7 @@ function Header() {
   const handleUpdateUserInfo = async (formData) => {
     try {
       // Gọi API cập nhật thông tin người dùng
-      const response = await fetch('http://localhost:8080/api/users/update', {
+      const response = await fetch('http://192.168.1.100:8080/api/users/update', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ function Header() {
   const handlePasswordChange = async (formData) => {
     try {
       // Gọi API đổi mật khẩu
-      const response = await fetch('http://localhost:8080/api/users/change-password', {
+      const response = await fetch('http://192.168.1.100:8080/api/users/change-password', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

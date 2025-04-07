@@ -39,7 +39,7 @@ function LightTable() {
     // lấy về dữ liệu các đèn từ backend
     const fetchLights = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/light/${currentUserId}`);
+        const response = await fetch(`http://192.168.1.100:8080/light/${currentUserId}`);
         if (response.ok) {
           const data = await response.json();
           if(data.length > 0){
@@ -61,7 +61,7 @@ function LightTable() {
       // lấy về dữ liệu các đèn từ backend
     const fetchLights = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/light/${currentUserId}`);
+        const response = await fetch(`http://192.168.1.100:8080/light/${currentUserId}`);
         if (response.ok) {
           const data = await response.json();
           if(data.length > 0){
@@ -87,7 +87,7 @@ function LightTable() {
     const newStatus = light.lightStatus === 1 ? 0 : 1;
     
     try {
-      const response = await fetch(`http://localhost:8080/light/toggle?lightId=${Number(light.lightId)}&userId=${Number(currentUserId)}`, {
+      const response = await fetch(`http://192.168.1.100:8080/light/toggle?lightId=${Number(light.lightId)}&userId=${Number(currentUserId)}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -111,7 +111,7 @@ function LightTable() {
 
   const handleRefreshLight = async (lightId) => {
     try {
-      const response = await fetch(`http://localhost:8080/light/${currentUserId}`, {
+      const response = await fetch(`http://192.168.1.100:8080/light/${currentUserId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -131,7 +131,7 @@ function LightTable() {
 
   const handleDeleteLight = async (lightId) => {
     try {
-      const response = await fetch(`http://localhost:8080/light/delete/user?userId=${currentUserId}&lightId=${lightId}`, {
+      const response = await fetch(`http://192.168.1.100:8080/light/delete/user?userId=${currentUserId}&lightId=${lightId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
@@ -153,7 +153,9 @@ function LightTable() {
       {lights.map(light => (
         <div className="row" key={light.lightId} data-id={`light-${light.lightId}`}>
           <div id="light-image" className="cell image">
-            <img src="light.png" alt="Light" />
+            {light.lightStatus === 1 && <img src="light.png" alt="Light" /> }
+            {light.lightStatus === 0 && <img src="light-1.png" alt="Light" /> }
+            {light.lightStatus === null && <img src="light-2.png" alt="Light" /> }
           </div>
           <div id="light-name" className="cell">{light.lightName}
           {light.lightName != null && <button className='cell edit' onClick={()=> handleEditPopup(light.lightId)}>✍🏻</button>}

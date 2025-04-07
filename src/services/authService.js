@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:8080/api/auth/';
+const API_URL = 'http://192.168.1.100:8080/api/auth/';
 
 //tạo axios với cấu hình mặc định
 const api = axios.create({
@@ -24,7 +24,7 @@ api.interceptors.request.use(
 // đăng ký tài khoản
 export const register = async (username, password, email, fullName) => {
     try {
-      const response = await api.post('http://localhost:8080/api/auth/register', {
+      const response = await api.post('http://192.168.1.100:8080/api/auth/register', {
         username,
         password,
         email,
@@ -42,7 +42,7 @@ export const register = async (username, password, email, fullName) => {
 // đăng nhập tài khoản
 export const login = async (username, password) => {
     try {
-      const response = await api.post('http://localhost:8080/api/auth/login', {
+      const response = await api.post('http://192.168.1.100:8080/api/auth/login', {
         username,
         password,
       });

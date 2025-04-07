@@ -1,22 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import CameraView from './CameraView';
+import { useAuth } from '../contexts/AuthContext';
+import EditDevicePopup from './EditDevicePopup';
 
 function CameraTable() {
+  const deviceType = "Camera";
+  const [isOpenEditPopup, setIsOpenEditPopup]=useState(false);
   const [cameras, setCameras] = useState([]);
   const [isOpenCameraView,setIsOpenCameraView] = useState(false);
+  const [selectedCameraId,setSelectedCameraId] = useState('');
+  const { currentUser } = useAuth();
+  const currentUserId = currentUser.userId;
+  const handleEditPopup = (cameraId) => {
+    setIsOpenEditPopup(true);
+    setSelectedCameraId(cameraId);
+  };
 
-  const handleOpenCameraView = () =>{
+  const handleOpenCameraView = (cameraId) =>{
     setIsOpenCameraView(true);
+    setSelectedCameraId(cameraId);
   }
   const handleClosePopup = () => {
-    setIsOpenCameraView(false)
+    setIsOpenCameraView(false);
+    setIsOpenEditPopup(false);
   };
   useEffect(() => {
 
     // Fetch cameras data
     const fetchCameras = async () => {
       try {
-        const response = await fetch('http://localhost:8080/camera/all');
+        const response = await fetch(`http://192.168.1.100:8080/camera/${currentUserId}`);
         if (response.ok) {
           const data = await response.json();
           if(data.length > 0){
@@ -88,8 +101,9 @@ function CameraTable() {
           <div className="cell image">
             <img src="camera.png" alt="Camera" />
           </div>
-          <div className="cell">{camera.cameraName}</div>
-          {camera.cameraName != null && <button className='cell edit' >✍🏻</button>}
+          <div className="cell">{camera.cameraName}
+          {camera.cameraName != null && <button className='cell edit' onClick={()=>handleEditPopup(camera.cameraId)} >✍🏻</button>}
+          </div>
           <div className="cell">ID: {camera.cameraId}</div>
           <div className="cell ip">IP: {camera.cameraIp}</div>
           <div className="cell status">
@@ -106,11 +120,11 @@ function CameraTable() {
                 ⟳
               </button>
             )}
-            {camera.cameraStatus === null && (
+            {camera.cameraStatus === 1 && (
               <button 
                 className="action-button"
                 // onClick={() => window.open(`/camera/view/${camera.cameraId}`, '_blank')}
-                onClick={handleOpenCameraView}
+                onClick={() => handleOpenCameraView(camera.cameraId)}
               >
                 View
               </button>
@@ -127,8 +141,16 @@ function CameraTable() {
         </div>
       ))}
       <CameraView
+      selectedCameraId={selectedCameraId}
       isOpen={isOpenCameraView}
       OnClose={handleClosePopup}
+      />
+      <EditDevicePopup
+        isOpen={isOpenEditPopup}
+        onClose={handleClosePopup}
+        deviceType={deviceType}
+        onAddDevice={deviceType}
+        deviceId={selectedCameraId}
       />
     </div>
     

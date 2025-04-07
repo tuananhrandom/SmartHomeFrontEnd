@@ -24,7 +24,7 @@ class WebSocketService {
     }
 
     // Tạo kết nối WebSocket với token
-    const wsUrl = `ws://localhost:8080/ws/client?token=${token}`;
+    const wsUrl = `ws://192.168.1.100:8080/ws/client?token=${token}`;
     
     try {
       this.socket = new WebSocket(wsUrl);

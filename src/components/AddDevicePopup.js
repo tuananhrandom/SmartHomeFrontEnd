@@ -41,10 +41,10 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDevi
       if(userRole === 'ADMIN'){
         //fetch về backend có @requestParam userId
 
-        endpoint = `http://localhost:8080/light/admin/newlight?lightId=${deviceId}`;
+        endpoint = `http://192.168.1.100:8080/light/admin/newlight?lightId=${deviceId}`;
       }
       else{
-        endpoint = `http://localhost:8080/light/newlight?userId=${currentUserId}`;
+        endpoint = `http://192.168.1.100:8080/light/newlight?userId=${currentUserId}`;
       }
     } else if (deviceType === 'Door') {
       data = {
@@ -55,23 +55,23 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDevi
       if(userRole === 'ADMIN'){
         //fetch về backend có @requestParam userId
 
-        endpoint = `http://localhost:8080/door/admin/newdoor?doorId=${deviceId}`;
+        endpoint = `http://192.168.1.100:8080/door/admin/newdoor?doorId=${deviceId}`;
       }
       else{
-        endpoint = `http://localhost:8080/door/newdoor?userId=${currentUserId}`;
+        endpoint = `http://192.168.1.100:8080/door/newdoor?userId=${currentUserId}`;
       }
     } else if (deviceType === 'Camera') {
       data = {
-        cameraId: deviceId,
+        cameraId: Number(deviceId),
         cameraName: deviceName
       };
       if(userRole === 'ADMIN'){
         //fetch về backend có @requestParam userId
 
-        endpoint = `http://localhost:8080/camera/admin/newcamera?cameraId=${deviceId}`;
+        endpoint = `http://192.168.1.100:8080/camera/admin/newcamera?cameraId=${deviceId}`;
       }
       else{
-        endpoint = `http://localhost:8080/camera/newcamera?userId=${currentUserId}`;
+        endpoint = `http://192.168.1.100:8080/camera/newcamera?userId=${currentUserId}`;
       }
     }
 

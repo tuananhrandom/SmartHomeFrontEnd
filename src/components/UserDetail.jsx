@@ -12,7 +12,7 @@ function UserDetail({ isOpen, onClose, onEditInfo, onChangePassword }) {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/auth/me', {
+        const response = await fetch('http://192.168.1.100:8080/api/auth/me', {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
@@ -30,7 +30,7 @@ function UserDetail({ isOpen, onClose, onEditInfo, onChangePassword }) {
 
     const fetchUserStats = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/users/stats', {
+        const response = await fetch('http://192.168.1.100:8080/api/users/stats', {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }

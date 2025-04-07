@@ -31,7 +31,7 @@ function DoorTable() {
     // Fetch doors data
     const fetchDoors = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/door/${currentUserId}`);
+        const response = await fetch(`http://192.168.1.100:8080/door/${currentUserId}`);
         if (response.ok) {
           const data = await response.json();
           if(data.length > 0){
@@ -58,7 +58,7 @@ function DoorTable() {
       // lấy về dữ liệu các đèn từ backend
     const fetchLights = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/door/${currentUserId}`);
+        const response = await fetch(`http://192.168.1.100:8080/door/${currentUserId}`);
         if (response.ok) {
           const data = await response.json();
           if(data.length > 0){
@@ -88,7 +88,7 @@ function DoorTable() {
     const newLockDown = door.doorLockDown === 1 ? 0 : 1;
     
     try {
-      const response = await fetch(`http://localhost:8080/door/toggle?doorId=${door.doorId}&userId=${currentUserId}`, {
+      const response = await fetch(`http://192.168.1.100:8080/door/toggle?doorId=${door.doorId}&userId=${currentUserId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -112,7 +112,7 @@ function DoorTable() {
 
   const handleRefreshDoor = async (doorId) => {
     try {
-      const response = await fetch(`http://localhost:8080/door/${currentUserId}`, {
+      const response = await fetch(`http://192.168.1.100:8080/door/${currentUserId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -136,7 +136,7 @@ function DoorTable() {
 
   const handleCheckDoor = async (doorId) => {
     try {
-      const response = await fetch(`http://localhost:8080/door/check/${doorId}`, {
+      const response = await fetch(`http://192.168.1.100:8080/door/check/${doorId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -160,7 +160,7 @@ function DoorTable() {
 
   const handleDeleteDoor = async (doorId) => {
     try {
-      const response = await fetch(`http://localhost:8080/door/user/delete?doorId=${doorId}&userId=${currentUserId}`, {
+      const response = await fetch(`http://192.168.1.100:8080/door/user/delete?doorId=${doorId}&userId=${currentUserId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
@@ -182,7 +182,9 @@ function DoorTable() {
       {doors.map(door => (
         <div className="row" key={door.doorId} data-id={`door-${door.doorId}`}>
           <div id="door-logo" className="cell image">
-            <img src="door.png" alt="Door" />
+          {door.doorStatus === 0 && <img src="door.png" alt="Door" /> }
+          {door.doorStatus === 1 && <img src="door-1.png" alt="Door" /> }
+          {door.doorStatus === null && <img src="door-2.png" alt="Door" /> }
           </div>
           <div id="door-name" className="cell">{door.doorName}
           {door.doorName != null && <button className='cell edit' onClick={()=>handleEditPopup(door.doorId)} >✍🏻</button>}
