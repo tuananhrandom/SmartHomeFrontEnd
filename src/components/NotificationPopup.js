@@ -1,14 +1,52 @@
 import React, { useState, useEffect, forwardRef } from 'react';
+import useWebSocket from '../hooks/useWebSocket';
+import { useAuth } from '../contexts/AuthContext';
 
 const NotificationPopup = forwardRef((props, ref) => {
   const [notifications, setNotifications] = useState([]);
+  const {currentUser}  = useAuth();
+  const currentUserId = currentUser.userId;
+
+  // Websocket cập nhật 
+  const { isConnected, lastMessage, error: wsError } = useWebSocket({
+    autoConnect: true,
+    events: ['notification-update']
+  });
+  // khi có sự kiện notification-update thì cập nhật lại danh sách đèn
+  useEffect(() => {
+    if (lastMessage && lastMessage.type === 'notification-update') {
+      // lấy về dữ liệu thông báo từ backend
+    const fetchNotifications = async () => {
+      try {
+        const response = await fetch(`http://192.168.1.100:8080/notification/${currentUserId}`);
+        if (response.ok) {
+          const data = await response.json();
+          if(data.length > 0){
+           setNotifications(data);
+          }
+          else{
+            return(
+              <div>
+                <h1>No lights found</h1>
+              </div>
+            )
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching lights:', error);
+      }
+    };
+    fetchNotifications();
+    }
+  }, [lastMessage]);
+
 
   useEffect(() => {
     // Giả lập dữ liệu thông báo ban đầu
     // Trong thực tế, bạn sẽ fetch dữ liệu từ API
     const fetchNotifications = async () => {
       try {
-        const response = await fetch('/api/notifications');
+        const response = await fetch(`http://192.168.1.100:8080/notification/${currentUserId}`);
         if (response.ok) {
           const data = await response.json();
           setNotifications(data);
