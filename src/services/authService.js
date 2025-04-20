@@ -72,7 +72,7 @@ export const getCurrentUser = async () => {
   
 // Kiểm tra người dùng đã đăng nhập chưa
 export const isAuthenticated = () => {
-    return localStorage.getItem('token') !== null;
+  return localStorage.getItem('token') !== null && !isTokenExpired();
   };
 
   //lấy thông tin người dùng 
@@ -80,3 +80,25 @@ export const getUser = () => {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
   };
+
+  // Kiểm tra token có hết hạn không
+export const isTokenExpired = () => {
+  const token = localStorage.getItem('token');
+  if (!token) return true;
+
+  try {
+    // Giải mã phần payload của JWT token
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const payload = JSON.parse(window.atob(base64));
+
+    // Kiểm tra thời gian hết hạn
+    const currentTime = Date.now() / 1000;
+    return payload.exp < currentTime;
+  } catch (error) {
+    console.error('Lỗi khi kiểm tra token:', error);
+    return true; // Nếu có lỗi xảy ra, coi như token không hợp lệ
+  }
+};
+
+

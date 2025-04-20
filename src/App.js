@@ -13,6 +13,7 @@ import Register from './components/Register';
 import AdminDashboard from './components/AdminDashboard';
 import { AuthProvider } from './contexts/AuthContext';
 import { useAuth } from './contexts/AuthContext';
+import TokenExpirationHandler from './components/TokenExpirationHandler';
 
 // Component Dashboard chứa nội dung chính của ứng dụng
 const Dashboard = () => {
@@ -118,6 +119,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+      <TokenExpirationHandler />
         <AppRoutes />
       </Router>
     </AuthProvider>

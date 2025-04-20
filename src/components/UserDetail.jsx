@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/userDetail.css';
-
+import { useAuth } from '../contexts/AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
 function UserDetail({ isOpen, onClose, onEditInfo, onChangePassword }) {
+  const navigate = useNavigate();
+  const{currentUser, logout} = useAuth();
   const [userData, setUserData] = useState(null);
   const [userStats, setUserStats] = useState({
     totalDevices: 0,
     activeDevices: 0,
     totalScenes: 0
   });
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.error('Lỗi đăng xuất:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -28,26 +39,26 @@ function UserDetail({ isOpen, onClose, onEditInfo, onChangePassword }) {
       }
     };
 
-    const fetchUserStats = async () => {
-      try {
-        const response = await fetch('http://192.168.1.100:8080/api/users/stats', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        if (!response.ok) {
-          throw new Error('Không thể lấy thống kê người dùng');
-        }
-        const data = await response.json();
-        setUserStats(data);
-      } catch (error) {
-        console.error('Lỗi khi lấy thống kê:', error);
-      }
-    };
+    // const fetchUserStats = async () => {
+    //   try {
+    //     const response = await fetch('http://192.168.1.100:8080/api/users/stats', {
+    //       headers: {
+    //         'Authorization': `Bearer ${localStorage.getItem('token')}`
+    //       }
+    //     });
+    //     if (!response.ok) {
+    //       throw new Error('Không thể lấy thống kê người dùng');
+    //     }
+    //     const data = await response.json();
+    //     setUserStats(data);
+    //   } catch (error) {
+    //     console.error('Lỗi khi lấy thống kê:', error);
+    //   }
+    // };
 
     if (isOpen) {
       fetchUserData();
-      fetchUserStats();
+      // fetchUserStats();
     }
   }, [isOpen]);
 
@@ -111,6 +122,9 @@ function UserDetail({ isOpen, onClose, onEditInfo, onChangePassword }) {
           </button>
           <button className="change-password-button" onClick={onChangePassword}>
             Đổi mật khẩu
+          </button>
+          <button className="logout-button" onClick={handleLogout}>
+            Đăng xuất
           </button>
         </div>
       </div>

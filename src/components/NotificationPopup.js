@@ -142,17 +142,25 @@ const NotificationPopup = forwardRef((props, ref) => {
               key={notification.notificationId} 
               data-id={`notification-${notification.notificationId}`}
             >
-              <div className="image-placeholder">
-                <img 
-                  className="notification-image" 
-                  src={notification.notificationImage} 
-                  alt="Notification" 
-                />
-              </div>
+            <div className="image-placeholder">
+              <img 
+                className="notification-image" 
+                src={(() => {
+                  const typeImageMap = {
+                    'Light': '/light.png',
+                    'Door': '/door.png',
+                    'Camera': '/camera.png'
+                  };
+                  
+                  return typeImageMap[notification.notificationType] || notification.notificationImage || '/light.png';
+                })()} 
+                alt={`${notification.notificationType || 'Notification'}`} 
+              />
+            </div>
               <div className="notification-content">
                 <p className="notification-title">{notification.notificationTitle}</p>
                 <p className="notification-text">
-                  {notification.notificationContent} - {notification.time}
+                  {notification.notificationContent} - {notification.timeCreate}- {notification.dateCreate}
                 </p>
               </div>
               <button 

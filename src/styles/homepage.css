@@ -57,9 +57,40 @@ body {
     border-radius: 50%;
     background-color: #eeeeee;
 }
+/* Dấu chấm đỏ */
+.notification .dot {
+position: absolute;
+top: 0;
+right: 0;
+width: 10px;
+height: 10px;
+background-color: red;
+border-radius: 50%;
+display: block;
+}
+
+/* Hiệu ứng lắc */
+@keyframes shake {
+0% { transform: rotate(0); }
+10% { transform: rotate(-10deg); }
+20% { transform: rotate(10deg); }
+30% { transform: rotate(-10deg); }
+40% { transform: rotate(10deg); }
+50% { transform: rotate(-10deg); }
+60% { transform: rotate(10deg); }
+70% { transform: rotate(-10deg); }
+80% { transform: rotate(10deg); }
+90% { transform: rotate(-10deg); }
+100% { transform: rotate(0); }
+}
+
+.notification .shake {
+animation: shake 0.5s;
+animation-iteration-count: 2;
+}
 
 .notification {
-    /* position: relative; */
+    position: relative;
     cursor: pointer;
 
 }

@@ -2,34 +2,48 @@ import React, { useState, useEffect, useRef } from 'react';
 import NotificationPopup from './NotificationPopup';
 import UserDetail from './UserDetail';
 import { useAuth } from '../contexts/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
-
+import useWebSocket from '../hooks/useWebSocket';
 import EditUserInfo from './EditUserInfo';
 import ChangePassword from './ChangePassword';
 
 function Header() {
-  const { currentUser, logout } = useAuth();
-  const navigate = useNavigate();
+  
   const [showNotifications, setShowNotifications] = useState(false);
   const notificationRef = useRef(null);
   const bellRef = useRef(null);
+  const [hasNewNotifications, setHasNewNotifications] = useState(false);
+  const [isShaking, setIsShaking] = useState(false);
   const [showUserDetail, setShowUserDetail] = useState(false);
   const [showEditInfo, setShowEditInfo] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const { currentUser } = useAuth();
+  const currentUserId = currentUser?.userId;
+  // xử lý khi có thông báo mới
+  // Lắng nghe sự kiện thông báo mới từ WebSocket
+  const { lastMessage } = useWebSocket({
+  autoConnect: true,
+  events: ['notification-update']
+});
+  // Khi có thông báo mới, đặt hasNewNotifications = true và kích hoạt hiệu ứng lắc
+  useEffect(() => {
+    if (lastMessage && lastMessage.type === 'notification-update') {
+      setHasNewNotifications(true);
+      
+      // Kích hoạt hiệu ứng lắc
+      setIsShaking(true);
+      
+      // Ngừng hiệu ứng lắc sau 2 giây
+      const timer = setTimeout(() => {
+        setIsShaking(false);
+      }, 2000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [lastMessage]);
 
   const toggleNotificationPopup = () => {
     setShowNotifications(!showNotifications);
   };
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/login');
-    } catch (error) {
-      console.error('Lỗi đăng xuất:', error);
-    }
-  };
-
   const handleUserDetail = () => {
     setShowUserDetail(true);
   };
@@ -120,8 +134,8 @@ function Header() {
           </button> */}
         </div>
         <div className="notification" ref={bellRef} onClick={toggleNotificationPopup}>
-          <span className="bell"></span>
-          {/* <span className="dot"></span> */}
+          <span className={`bell ${isShaking ? 'shake' : ''}`}></span>
+          {hasNewNotifications && <span className="dot"></span>}
         </div>
       </div>
 

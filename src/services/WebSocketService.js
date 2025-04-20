@@ -1,3 +1,4 @@
+import { isTokenExpired } from './authService';
 class WebSocketService {
   constructor() {
     this.socket = null;
@@ -16,6 +17,11 @@ class WebSocketService {
   }
 
   connect() {
+     // Kiểm tra token trước khi kết nối
+     if (isTokenExpired()) {
+      this.triggerEvent('token-expired', { message: 'Token đã hết hạn' });
+      return;
+    }
     // Lấy token từ localStorage
     const token = localStorage.getItem('token');
     if (!token) {
