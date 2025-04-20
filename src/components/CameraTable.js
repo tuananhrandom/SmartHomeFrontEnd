@@ -96,55 +96,77 @@ function CameraTable() {
 
   return (
     <div>
-      {cameras.map(camera => (
-        <div className="row" key={camera.cameraId} data-id={`camera-${camera.cameraId}`}>
-          <div className="cell image">
-            <img src="camera.png" alt="Camera" />
-          </div>
-          <div className="cell">{camera.cameraName}
-          {camera.cameraName != null && <button className='cell edit' onClick={()=>handleEditPopup(camera.cameraId)} >✍🏻</button>}
-          </div>
-          <div className="cell">ID: {camera.cameraId}</div>
-          <div className="cell ip">IP: {camera.cameraIp}</div>
-          <div className="cell status">
-            Status: 
-            {camera.cameraStatus === 1 && <span className="status-on">Connected</span>}
-            {camera.cameraStatus === null && <span className="status-on">Disconnected</span>}
-          </div>
-          <div className="cell action">
-            {camera.cameraStatus === null && (
-              <button 
-                className="action-button refresh"
-                onClick={() => handleRefreshCamera(camera.cameraId)}
-              >
-                ⟳
-              </button>
-            )}
-            {camera.cameraStatus === 1 && (
-              <button 
-                className="action-button"
-                // onClick={() => window.open(`/camera/view/${camera.cameraId}`, '_blank')}
-                onClick={() => handleOpenCameraView(camera.cameraId)}
-              >
-                View
-              </button>
-            )}
-          </div>
-          <div className="cell delete">
-            <button 
-              className="delete-button"
-              onClick={() => handleDeleteCamera(camera.cameraId)}
-            >
-              ✖
-            </button>
-          </div>
+      {cameras.length === 0 ? (
+        <div className="row no-device">
+          <div className="cell">⚠️ No Camera Found</div>
         </div>
-      ))}
+      ) : (
+        <>
+          {cameras.map(camera => (
+            <div className="row" key={camera.cameraId} data-id={`camera-${camera.cameraId}`}>
+              <div className="cell image">
+                <img src="camera.png" alt="Camera" />
+              </div>
+  
+              <div className="cell">
+                {camera.cameraName}
+                {camera.cameraName != null && (
+                  <button
+                    className="cell edit"
+                    onClick={() => handleEditPopup(camera.cameraId)}
+                  >
+                    ✍🏻
+                  </button>
+                )}
+              </div>
+  
+              <div className="cell">ID: {camera.cameraId}</div>
+              <div className="cell ip">IP: {camera.cameraIp}</div>
+  
+              <div className="cell status">
+                Status:
+                {camera.cameraStatus === 1 && <span className="status-on">Connected</span>}
+                {camera.cameraStatus === null && <span className="status-on">Disconnected</span>}
+              </div>
+  
+              <div className="cell action">
+                {camera.cameraStatus === null && (
+                  <button
+                    className="action-button refresh"
+                    onClick={() => handleRefreshCamera(camera.cameraId)}
+                  >
+                    ⟳
+                  </button>
+                )}
+                {camera.cameraStatus === 1 && (
+                  <button
+                    className="action-button"
+                    onClick={() => handleOpenCameraView(camera.cameraId)}
+                  >
+                    View
+                  </button>
+                )}
+              </div>
+  
+              <div className="cell delete">
+                <button
+                  className="delete-button"
+                  onClick={() => handleDeleteCamera(camera.cameraId)}
+                >
+                  ✖
+                </button>
+              </div>
+            </div>
+          ))}
+        </>
+      )}
+  
       <CameraView
-      selectedCameraId={selectedCameraId}
-      isOpen={isOpenCameraView}
-      OnClose={handleClosePopup}
+        selectedCameraId={selectedCameraId}
+        isOpen={isOpenCameraView}
+        OnClose={handleClosePopup}
       />
+  
       <EditDevicePopup
         isOpen={isOpenEditPopup}
         onClose={handleClosePopup}
@@ -153,7 +175,6 @@ function CameraTable() {
         deviceId={selectedCameraId}
       />
     </div>
-    
   );
 }
 

@@ -195,6 +195,14 @@ animation-iteration-count: 2;
     border-bottom: 1px solid #eeeeee;
     padding: 10px 0;
     justify-content: space-between;
+    background-color: #B9E0E9;
+    transition:all 0.5s;
+    z-index: -100;
+}
+.row:hover{
+    background-color: #B2D1D6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
 }
 
 .cell {

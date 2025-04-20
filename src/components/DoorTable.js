@@ -179,112 +179,134 @@ function DoorTable() {
 
   return (
     <div>
-      {doors.map(door => (
-        <div className="row" key={door.doorId} data-id={`door-${door.doorId}`}>
-          <div id="door-logo" className="cell image">
-          {door.doorStatus === 0 && <img src="door.png" alt="Door" /> }
-          {door.doorStatus === 1 && <img src="door-1.png" alt="Door" /> }
-          {door.doorStatus === null && <img src="door-2.png" alt="Door" /> }
-          </div>
-          <div id="door-name" className="cell">{door.doorName}
-          {door.doorName != null && <button className='cell edit' onClick={()=>handleEditPopup(door.doorId)} >✍🏻</button>}
-          </div>
-          <div id="door-id" className="cell">ID: {door.doorId}</div>
-          <div id="door-ip" className="cell ip">IP: {door.doorIp}</div>
-          <div id="door-status" className="cell status">
-            Status: 
-            {door.doorStatus === 1 && <span className="status-on">OPEN</span>}
-            {door.doorStatus === 0 && <span className="status-off">CLOSE</span>}
-            {door.doorStatus === null && <span className="status-on">Disconnected</span>}
-          </div>
-          <div id="door-lockdown" className="cell status">
-            Alert:
-            {door.doorLockDown === 0 && <span className="status-off">OFF</span>}
-            {door.doorLockDown === 1 && <span className="status-on">ON</span>}
-            {door.doorLockDown === null && <span className="status-on">Null</span>}
-          </div>
-          <div id="door-action" className="cell action">
-            {door.doorLockDown === 1 && (
-              <button 
-                id="btn-turn-off" 
-                className="action-button turn-off"
-                onClick={() => handleToggleAlert(door)}
-              >
-                Alert Off
-              </button>
-            )}
-            {door.doorLockDown === 0 && (
-              <button 
-                id="btn-turn-on" 
-                className="action-button turn-on"
-                onClick={() => handleToggleAlert(door)}
-              >
-                Alert On
-              </button>
-            )}
-            {(door.doorLockDown === null || door.doorStatus === null) && (
-              <button 
-                id="btn-refresh" 
-                className="action-button refresh"
-                onClick={() => handleRefreshDoor(door.doorId)}
-              >
-                ⟳
-              </button>
-            )}
-            {door.doorStatus === null && (
-              <button 
-                className="schedule-button"
-                onClick={() => handleSchedulePopup(door.doorId)}
-                title="Đặt lịch trình"
-                disabled
-              >
-                🕒
-              </button>
-            )}
-              {door.doorStatus != null && (
-              <button 
-                className="schedule-button"
-                onClick={() => handleSchedulePopup(door.doorId)}
-                title="Đặt lịch trình"
-              >
-                🕒
-              </button>
-              )}
-          </div>
-          <div id="door-warning" className={`cell warning ${door.doorAlert ? 'warning-blink' : ''}`} data-value={door.doorAlert ? 1 : 0}>
-            <span>⚠️</span>
-          </div>
-
-          <div className="cell action">
-          {door.doorAlert === 1 &&(
-            <button 
-              className="action-button check" 
-              id="check-btn"
-              onClick={() => handleCheckDoor(door.doorId)}
-            >
-              OK
-            </button>
-          )}
-          </div>
-          <div id="door-delete" className="cell delete">
-            <button 
-              className="delete-button"
-              onClick={() => handleDeleteDoor(door.doorId)}
-            >
-              ✖
-            </button>
-          </div>
+      {doors.length === 0 ? (
+        <div className="row no-device">
+          <div className="cell">⚠️ No Smart Door Device</div>
         </div>
-      ))}
+      ) : (
+        <>
+          {doors.map(door => (
+            <div className="row" key={door.doorId} data-id={`door-${door.doorId}`}>
+              <div id="door-logo" className="cell image">
+                {door.doorStatus === 0 && <img src="door.png" alt="Door" />}
+                {door.doorStatus === 1 && <img src="door-1.png" alt="Door" />}
+                {door.doorStatus === null && <img src="door-2.png" alt="Door" />}
+              </div>
+  
+              <div id="door-name" className="cell">
+                {door.doorName}
+                {door.doorName != null && (
+                  <button className="cell edit" onClick={() => handleEditPopup(door.doorId)}>✍🏻</button>
+                )}
+              </div>
+  
+              <div id="door-id" className="cell">ID: {door.doorId}</div>
+              <div id="door-ip" className="cell ip">IP: {door.doorIp}</div>
+  
+              <div id="door-status" className="cell status">
+                Status:
+                {door.doorStatus === 1 && <span className="status-on">OPEN</span>}
+                {door.doorStatus === 0 && <span className="status-off">CLOSE</span>}
+                {door.doorStatus === null && <span className="status-on">Disconnected</span>}
+              </div>
+  
+              <div id="door-lockdown" className="cell status">
+                Alert:
+                {door.doorLockDown === 0 && <span className="status-off">OFF</span>}
+                {door.doorLockDown === 1 && <span className="status-on">ON</span>}
+                {door.doorLockDown === null && <span className="status-on">Null</span>}
+              </div>
+  
+              <div id="door-action" className="cell action">
+                {door.doorLockDown === 1 && (
+                  <button
+                    id="btn-turn-off"
+                    className="action-button turn-off"
+                    onClick={() => handleToggleAlert(door)}
+                  >
+                    Alert Off
+                  </button>
+                )}
+                {door.doorLockDown === 0 && (
+                  <button
+                    id="btn-turn-on"
+                    className="action-button turn-on"
+                    onClick={() => handleToggleAlert(door)}
+                  >
+                    Alert On
+                  </button>
+                )}
+                {(door.doorLockDown === null || door.doorStatus === null) && (
+                  <button
+                    id="btn-refresh"
+                    className="action-button refresh"
+                    onClick={() => handleRefreshDoor(door.doorId)}
+                  >
+                    ⟳
+                  </button>
+                )}
+                {door.doorStatus === null && (
+                  <button
+                    className="schedule-button"
+                    onClick={() => handleSchedulePopup(door.doorId)}
+                    title="Đặt lịch trình"
+                    disabled
+                  >
+                    🕒
+                  </button>
+                )}
+                {door.doorStatus != null && (
+                  <button
+                    className="schedule-button"
+                    onClick={() => handleSchedulePopup(door.doorId)}
+                    title="Đặt lịch trình"
+                  >
+                    🕒
+                  </button>
+                )}
+              </div>
+  
+              <div
+                id="door-warning"
+                className={`cell warning ${door.doorAlert ? 'warning-blink' : ''}`}
+                data-value={door.doorAlert ? 1 : 0}
+              >
+                <span>⚠️</span>
+              </div>
+  
+              <div className="cell action">
+                {door.doorAlert === 1 && (
+                  <button
+                    className="action-button check"
+                    id="check-btn"
+                    onClick={() => handleCheckDoor(door.doorId)}
+                  >
+                    OK
+                  </button>
+                )}
+              </div>
+  
+              <div id="door-delete" className="cell delete">
+                <button
+                  className="delete-button"
+                  onClick={() => handleDeleteDoor(door.doorId)}
+                >
+                  ✖
+                </button>
+              </div>
+            </div>
+          ))}
+        </>
+      )}
+  
       <EditDevicePopup
         isOpen={isOpenEditPopup}
         onClose={handleClosePopup}
         deviceType={deviceType}
         onAddDevice={deviceType}
         deviceId={selectedDoorId}
-
       />
-      <SchedulePopup 
+      <SchedulePopup
         isOpen={isOpenSchedulePopup}
         onClose={handleClosePopup}
         deviceType={deviceType}
@@ -293,6 +315,7 @@ function DoorTable() {
       />
     </div>
   );
+  
 }
 
 export default DoorTable; 
