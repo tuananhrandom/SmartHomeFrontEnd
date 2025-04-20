@@ -61,7 +61,7 @@ function UserDetail({ isOpen, onClose, onEditInfo, onChangePassword }) {
           <button className="close-button" onClick={onClose}>×</button>
         </div>
         <div className="modal-body">
-          <div className="user-info">
+          <div className="user-info-inside">
             <div className="info-group">
               <label>Tên đăng nhập:</label>
               <span>{userData.username}</span>

@@ -113,15 +113,15 @@ function Header() {
       </div>
       <div className="header-right">
         <div className="user-info">
-          <span className="username">{currentUser?.username}</span>
+          {/* <span className="username">{currentUser?.username}</span> */}
           <img className="user" src="user-profile.png" alt="User Profile" onClick={handleUserDetail} />
-          <button className="logout-button" onClick={handleLogout}>
+          {/* <button className="logout-button" onClick={handleLogout}>
             Đăng xuất
-          </button>
+          </button> */}
         </div>
         <div className="notification" ref={bellRef} onClick={toggleNotificationPopup}>
           <span className="bell"></span>
-          <span className="dot"></span>
+          {/* <span className="dot"></span> */}
         </div>
       </div>
 
