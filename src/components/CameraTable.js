@@ -2,20 +2,26 @@ import React, { useState, useEffect } from 'react';
 import CameraView from './CameraView';
 import { useAuth } from '../contexts/AuthContext';
 import EditDevicePopup from './EditDevicePopup';
+import DeviceActivityModal from './DeviceActivityModal';
 
 function CameraTable() {
   const deviceType = "Camera";
   const [isOpenEditPopup, setIsOpenEditPopup]=useState(false);
   const [cameras, setCameras] = useState([]);
+  const [isOpenActivityModal, setIsOpenActivityModal] = useState(false);
   const [isOpenCameraView,setIsOpenCameraView] = useState(false);
   const [selectedCameraId,setSelectedCameraId] = useState('');
+
   const { currentUser } = useAuth();
   const currentUserId = currentUser.userId;
   const handleEditPopup = (cameraId) => {
     setIsOpenEditPopup(true);
     setSelectedCameraId(cameraId);
   };
-
+  const handleActivityModal = (cameraId) => {
+    setIsOpenActivityModal(true);
+    setSelectedCameraId(cameraId);
+  }
   const handleOpenCameraView = (cameraId) =>{
     setIsOpenCameraView(true);
     setSelectedCameraId(cameraId);
@@ -23,6 +29,8 @@ function CameraTable() {
   const handleClosePopup = () => {
     setIsOpenCameraView(false);
     setIsOpenEditPopup(false);
+    setIsOpenActivityModal(false);
+
   };
   useEffect(() => {
 
@@ -104,7 +112,7 @@ function CameraTable() {
         <>
           {cameras.map(camera => (
             <div className="row" key={camera.cameraId} data-id={`camera-${camera.cameraId}`}>
-              <div className="cell image">
+              <div className="cell image" onClick={() => handleActivityModal(camera.cameraId)}>
                 <img src="camera.png" alt="Camera" />
               </div>
   
@@ -174,6 +182,14 @@ function CameraTable() {
         onAddDevice={deviceType}
         deviceId={selectedCameraId}
       />
+        {isOpenActivityModal && (
+        <DeviceActivityModal
+          isOpen={isOpenActivityModal}
+          onClose={handleClosePopup}
+          deviceType={deviceType}
+          deviceId={selectedCameraId}
+        />
+      )}
     </div>
   );
 }

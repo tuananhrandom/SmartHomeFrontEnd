@@ -6,10 +6,11 @@ const CameraView = ({selectedCameraId ,isOpen, OnClose }) => {
   const { currentUser } = useAuth();
   const currentUserId = currentUser.userId;
   const [isConnected, setIsConnected] = useState(false);
+
   const [error, setError] = useState(null);
   const videoRef = useRef(null);
   const wsRef = useRef(null);
-  
+
   useEffect(() => {
     // Khởi tạo kết nối WebSocket
     const ws = new WebSocket(`ws://192.168.1.100:8080/ws/camera/livecamera`);

@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import useWebSocket from '../hooks/useWebSocket';
 import EditDevicePopup from './EditDevicePopup';
 import SchedulePopup from './SchedulePopup';
+import DeviceActivityModal from './DeviceActivityModal';
 function DoorTable() {
   const deviceType = 'Door';
   const[isOpenSchedulePopup, setIsOpenSchedulePopup] = useState(false);
@@ -11,6 +12,7 @@ function DoorTable() {
   const { currentUser } = useAuth();
   const [selectedDoorId, setSelectedDoorId] = useState('');
   const currentUserId = currentUser.userId;
+  const [isOpenActivityModal, setIsOpenActivityModal] = useState(false);
       // Sử dụng WebSocket để lắng nghe cập nhật về thiết bị đèn
       const { isConnected, lastMessage, error: wsError } = useWebSocket({
         autoConnect: true,
@@ -25,6 +27,7 @@ function DoorTable() {
       const handleClosePopup = () => {
       setIsOpenEditPopup(false);
       setIsOpenSchedulePopup(false);
+      setIsOpenActivityModal(false);
       };
   useEffect(() => {
     
@@ -134,6 +137,11 @@ function DoorTable() {
     }
   };
 
+  const handleActivityModal = (doorId) => {
+    setIsOpenActivityModal(true);
+    setSelectedDoorId(doorId);
+  }
+
   const handleCheckDoor = async (doorId) => {
     try {
       const response = await fetch(`http://192.168.1.100:8080/door/check/${doorId}`, {
@@ -187,7 +195,7 @@ function DoorTable() {
         <>
           {doors.map(door => (
             <div className="row" key={door.doorId} data-id={`door-${door.doorId}`}>
-              <div id="door-logo" className="cell image">
+              <div id="door-logo" className="cell image" onClick={() => handleActivityModal(door.doorId)}>
                 {door.doorStatus === 0 && <img src="door.png" alt="Door" />}
                 {door.doorStatus === 1 && <img src="door-1.png" alt="Door" />}
                 {door.doorStatus === null && <img src="door-2.png" alt="Door" />}
@@ -313,6 +321,14 @@ function DoorTable() {
         deviceId={selectedDoorId}
         userId={currentUserId}
       />
+      {isOpenActivityModal && (
+        <DeviceActivityModal
+          isOpen={isOpenActivityModal}
+          onClose={handleClosePopup}
+          deviceType={deviceType}
+          deviceId={selectedDoorId}
+        />
+      )}
     </div>
   );
   

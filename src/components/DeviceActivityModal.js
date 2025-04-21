@@ -6,7 +6,13 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
   const [activities, setActivities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filterType, setFilterType] = useState('all');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
   const { currentUser } = useAuth();
+  const formatToLocalISOString = (datetimeStr) => {
+    const date = new Date(datetimeStr);
+    return date.toLocaleString('sv-SE').replace(' ', 'T');
+  };
 
   useEffect(() => {
     if (isOpen && deviceType && deviceId) {
@@ -17,20 +23,30 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
   const fetchActivities = async () => {
     setIsLoading(true);
     try {
-      let url = `http://192.168.1.100:8080/api/device-activities/device?deviceType=${deviceType}&deviceId=${deviceId}`;
+      let url = '';
       
+      if (filterType === 'range') {
+        // Format ngày giờ đúng ISO để server Spring hiểu
+        const start = formatToLocalISOString(startTime); // "2025-04-20T13:21:00"
+        const end = formatToLocalISOString(endTime);
+  
+        url = `http://192.168.1.100:8080/api/device-activities/time-range?deviceType=${deviceType}&deviceId=${deviceId}&startTime=${start}&endTime=${end}`;
+      } else {
+        url = `http://192.168.1.100:8080/api/device-activities/device?deviceType=${deviceType}&deviceId=${deviceId}`;
+      }
+  
       const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-
+  
       if (response.ok) {
         const data = await response.json();
-        
-        // Lọc theo loại hoạt động nếu cần
         let filteredData = data;
-        if (filterType !== 'all') {
+  
+        // Chỉ lọc khi không phải range
+        if (filterType !== 'all' && filterType !== 'range') {
           filteredData = data.filter(activity => {
             if (filterType === 'on_off') {
               return ['ON', 'OFF'].includes(activity.activityType);
@@ -44,7 +60,7 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
             return true;
           });
         }
-        
+  
         setActivities(filteredData);
       } else {
         console.error('Không thể lấy dữ liệu hoạt động');
@@ -74,10 +90,10 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
 
   const getActivityIcon = (activityType) => {
     switch (activityType) {
-      case 'ON': return '💡';
-      case 'OFF': return '⚪';
+      case 'ON': return 'Light.png';
+      case 'OFF': return 'Light-1.png';
       case 'CONNECT': return '🔌';
-      case 'DISCONNECT': return '🔌';
+      case 'DISCONNECT': return 'Light-2.png';
       case 'OPEN': return '🔓';
       case 'CLOSE': return '🔒';
       case 'ALARM_ON': return '🚨';
@@ -125,12 +141,18 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
                 Tất cả
               </button>
               <button 
+                className={`filter-button ${filterType === 'range' ? 'active' : ''}`}
+                onClick={() => setFilterType('range')}
+              >
+                Time Range
+              </button>
+              <button 
                 className={`filter-button ${filterType === 'on_off' ? 'active' : ''}`}
                 onClick={() => setFilterType('on_off')}
               >
                 Bật/Tắt
               </button>
-              {deviceType === 'DOOR' && (
+              {deviceType === 'Door' && (
                 <button 
                   className={`filter-button ${filterType === 'door' ? 'active' : ''}`}
                   onClick={() => setFilterType('door')}
@@ -138,7 +160,7 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
                   Mở/Đóng cửa
                 </button>
               )}
-              {deviceType === 'CAMERA' && (
+              {deviceType === 'Camera' && (
                 <button 
                   className={`filter-button ${filterType === 'camera' ? 'active' : ''}`}
                   onClick={() => setFilterType('camera')}
@@ -153,6 +175,22 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
                 Kết nối
               </button>
             </div>
+
+            {filterType === 'range' && (
+              <div className="time-range-picker">
+                <input 
+                  type="datetime-local" 
+                  value={startTime} 
+                  onChange={(e) => setStartTime(e.target.value)} 
+                />
+                <input 
+                  type="datetime-local" 
+                  value={endTime} 
+                  onChange={(e) => setEndTime(e.target.value)} 
+                />
+                <button onClick={fetchActivities}>Lọc</button>
+              </div>
+            )}
             
             <div className="activity-list">
               {isLoading ? (
@@ -163,26 +201,17 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
                 <div className="activities">
                   {activities.map((activity, index) => (
                     <div key={index} className={`activity-item ${getActivityTypeClass(activity.activityType)}`}>
-                      <div className="activity-icon">
-                        {getActivityIcon(activity.activityType)}
+                      <div className="cell image">
+                        <img src={getActivityIcon(activity.activityType)} alt='Image'/>
                       </div>
                       <div className="activity-info">
                         <div className="activity-header">
                           <span className="activity-type">{getActivityLabel(activity.activityType)}</span>
-                          <span className="activity-time">{activity.getFormattedTime()}</span>
+                          <span className="activity-time">{activity.formattedTime}</span>
                         </div>
-                        <div className="activity-date">{activity.getFormattedDate()}</div>
+                        <div className="activity-date">{activity.formattedDate}</div>
                         {activity.description && (
                           <div className="activity-description">{activity.description}</div>
-                        )}
-                        {(activity.previousState || activity.currentState) && (
-                          <div className="activity-state-change">
-                            {activity.previousState && <span className="previous-state">Từ: {activity.previousState}</span>}
-                            {activity.currentState && <span className="current-state">Đến: {activity.currentState}</span>}
-                          </div>
-                        )}
-                        {activity.ipAddress && (
-                          <div className="activity-ip">IP: {activity.ipAddress}</div>
                         )}
                       </div>
                     </div>

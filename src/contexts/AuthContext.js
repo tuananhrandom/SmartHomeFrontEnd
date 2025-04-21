@@ -1,11 +1,30 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { login, logout, register, getCurrentUser, getUser, isAuthenticated } from '../services/authService';
+import { isTokenExpired } from '../services/authService';
 
 const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+     // Kiểm tra token định kỳ
+     useEffect(() => {
+      const checkTokenValidity = () => {
+        if (isTokenExpired()) {
+          // Nếu token hết hạn, đăng xuất và xóa thông tin người dùng
+          handleLogout();
+          // Chuyển hướng đến trang đăng nhập sẽ được xử lý bởi PrivateRoute
+        }
+      };
+
+      // Kiểm tra ngay khi component được mount
+      checkTokenValidity();
+
+      // Kiểm tra token mỗi phút
+      const intervalId = setInterval(checkTokenValidity, 60000);
+
+      return () => clearInterval(intervalId);
+    }, []);
   
     useEffect(() => {
       const initAuth = async () => {

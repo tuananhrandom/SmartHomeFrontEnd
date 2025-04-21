@@ -246,6 +246,72 @@
   border-left-color: #7f8c8d;
 }
 
+/* Time Range Picker Styling */
+.time-range-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  align-items: center;
+}
+
+.time-range-picker input[type="datetime-local"] {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #444;
+  transition: all 0.3s;
+  background-color: white;
+}
+
+.time-range-picker input[type="datetime-local"]:focus {
+  border-color: #B2D1D6;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(178, 209, 214, 0.3);
+}
+
+.time-range-picker button {
+  background-color: #B2D1D6;
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+  min-width: 80px;
+}
+
+.time-range-picker button:hover {
+  background-color: #8da8ac;
+  transform: scale(1.05);
+  color: white;
+}
+
+/* Responsive styling for time picker */
+@media (max-width: 768px) {
+  .time-range-picker {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .time-range-picker input[type="datetime-local"] {
+    width: 100%;
+  }
+  
+  .time-range-picker button {
+    width: 100%;
+    margin-top: 5px;
+  }
+}
+
 /* Responsive styling */
 @media (max-width: 768px) {
   .activity-modal {
