@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import '../styles/changePassword.css';
+import { useNavigate } from 'react-router-dom';
+
 
 function ChangePassword({ isOpen, onClose, onChangePassword }) {
   const [formData, setFormData] = useState({
-    currentPassword: '',
+    oldPassword: '',
     newPassword: '',
     confirmPassword: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+  const [success, setSuccess] = useState('');
 
   if (!isOpen) return null;
 
@@ -41,16 +46,25 @@ function ChangePassword({ isOpen, onClose, onChangePassword }) {
 
     try {
       await onChangePassword({
-        currentPassword: formData.currentPassword,
+        oldPassword: formData.oldPassword,
         newPassword: formData.newPassword
       });
-      onClose();
+      // onClose();
+       // Hiển thị thông báo thành công
+       setSuccess('Đổi mật khẩu thành công! Bạn sẽ được chuyển về trang đăng nhập sau vài giây.');
       // Reset form
-      setFormData({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-      });
+    setFormData({
+      oldPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    });
+      // Đợi 2 giây rồi đăng xuất và chuyển hướng
+      setTimeout(() => {
+        logout();
+        onClose();
+        navigate('/login');
+      }, 2000);
+
     } catch (error) {
       setError(error.message || 'Có lỗi xảy ra khi đổi mật khẩu');
     } finally {
@@ -70,8 +84,8 @@ function ChangePassword({ isOpen, onClose, onChangePassword }) {
             <label>Mật khẩu hiện tại:</label>
             <input
               type="password"
-              name="currentPassword"
-              value={formData.currentPassword}
+              name="oldPassword"
+              value={formData.oldPassword}
               onChange={handleChange}
               required
             />

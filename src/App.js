@@ -14,6 +14,7 @@ import AdminDashboard from './components/AdminDashboard';
 import { AuthProvider } from './contexts/AuthContext';
 import { useAuth } from './contexts/AuthContext';
 import TokenExpirationHandler from './components/TokenExpirationHandler';
+import ForgetPassword from './components/ForgetPassword';
 
 // Component Dashboard chứa nội dung chính của ứng dụng
 const Dashboard = () => {
@@ -81,6 +82,7 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forget" element = {<ForgetPassword/>}/>
       <Route
         path="/dashboard"
         element={

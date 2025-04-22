@@ -85,8 +85,8 @@ function Header() {
   const handlePasswordChange = async (formData) => {
     try {
       // Gọi API đổi mật khẩu
-      const response = await fetch('http://192.168.1.100:8080/api/users/change-password', {
-        method: 'PUT',
+      const response = await fetch('http://192.168.1.100:8080/api/auth/change-password', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`

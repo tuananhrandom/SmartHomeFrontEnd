@@ -9,7 +9,8 @@ class WebSocketService {
       'camera-update':[],
       'connect': [],
       'disconnect': [],
-      'error': []
+      'error': [],
+      'token-expired': []
     };
     this.reconnectAttempts = 0;
     this.maxReconnectAttempts = 5;
@@ -17,10 +18,13 @@ class WebSocketService {
   }
 
   connect() {
-     // Kiểm tra token trước khi kết nối
-     if (isTokenExpired()) {
-      this.triggerEvent('token-expired', { message: 'Token đã hết hạn' });
-      return;
+    // Chỉ kiểm tra token nếu có listeners cho token-expired event
+    if (this.listeners['token-expired'] && this.listeners['token-expired'].length > 0) {
+      // Kiểm tra token trước khi kết nối
+      if (isTokenExpired()) {
+        this.triggerEvent('token-expired', { message: 'Token đã hết hạn' });
+        return;
+      }
     }
     // Lấy token từ localStorage
     const token = localStorage.getItem('token');

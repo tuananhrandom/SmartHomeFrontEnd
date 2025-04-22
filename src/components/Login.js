@@ -67,6 +67,9 @@ const Login = () => {
         </button>
       </form>
       <p>
+        Quên Mật Khẩu? <Link to="/forget">Quên mật khẩu</Link> 
+      </p>
+      <p>
         Chưa có tài khoản? <Link to="/register">Đăng ký</Link>
       </p>
     </div>
