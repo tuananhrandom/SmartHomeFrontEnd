@@ -59,8 +59,8 @@ const CameraView = ({selectedCameraId ,isOpen, OnClose }) => {
     }
     setIsConnected(false);
     setError(null);
-    setIsConnected(true);
-    setError(null);
+    // setIsConnected(true);
+    // setError(null);
     
   };
   if (!isOpen) return null;

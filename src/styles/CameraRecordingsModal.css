@@ -1,0 +1,274 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.recordings-modal {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.recordings-header {
+  background: linear-gradient(135deg, #00aaff, #0077cc);
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.recordings-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.close-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.recordings-content {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.loading-spinner, .error-message, .empty-message {
+  padding: 30px;
+  text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.error-message {
+  color: #d32f2f;
+}
+
+.recordings-list {
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.recordings-list-header {
+  display: flex;
+  background-color: #f5f5f5;
+  font-weight: bold;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.recording-item {
+  display: flex;
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.2s;
+}
+
+.recording-item:last-child {
+  border-bottom: none;
+}
+
+.recording-item:hover {
+  background-color: #f9f9f9;
+}
+
+.recording-cell {
+  padding: 12px 15px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.recording-cell.actions {
+  flex: 0.7;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.play-button, .delete-button, .refresh-button, .back-button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-button {
+  background-color: #2196f3;
+  color: white;
+}
+
+.play-button:hover {
+  background-color: #0d8bf0;
+}
+
+.delete-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #e53935;
+}
+
+.refresh-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.refresh-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+}
+
+.refresh-button:hover {
+  background-color: #43a047;
+}
+
+/* Video Player Styles */
+.video-player-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.video-player-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.video-player-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.back-button {
+  background-color: #757575;
+  color: white;
+}
+
+.back-button:hover {
+  background-color: #616161;
+}
+
+.video-player {
+  width: 100%;
+  margin-bottom: 20px;
+  background-color: #000;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.video-player video {
+  display: block;
+  width: 100%;
+  max-height: 60vh;
+}
+
+.video-info {
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+.video-info p {
+  margin: 10px 0;
+  color: #555;
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .recordings-modal {
+    width: 95%;
+    max-height: 95vh;
+  }
+  
+  .recording-item {
+    flex-direction: column;
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .recordings-list-header {
+    display: none;
+  }
+  
+  .recording-cell {
+    padding: 5px 0;
+    border-bottom: none;
+  }
+  
+  .recording-cell.actions {
+    justify-content: flex-start;
+    margin-top: 10px;
+  }
+}
+
+/* Móc nối với CSS hiện có của dự án */
+.action-button.recordings {
+  background-color: #6200ea;
+  color: white;
+  margin-left: 5px;
+  transition: background-color 0.2s;
+}
+
+.action-button.recordings:hover {
+  background-color: #5100d3;
+} 

@@ -3,6 +3,8 @@ import CameraView from './CameraView';
 import { useAuth } from '../contexts/AuthContext';
 import EditDevicePopup from './EditDevicePopup';
 import DeviceActivityModal from './DeviceActivityModal';
+import CameraRecordingsModal from './CameraRecordingsModal';
+import useWebSocket from '../hooks/useWebSocket';
 
 function CameraTable() {
   const deviceType = "Camera";
@@ -10,10 +12,17 @@ function CameraTable() {
   const [cameras, setCameras] = useState([]);
   const [isOpenActivityModal, setIsOpenActivityModal] = useState(false);
   const [isOpenCameraView,setIsOpenCameraView] = useState(false);
+  const [isOpenRecordingsModal, setIsOpenRecordingsModal] = useState(false);
   const [selectedCameraId,setSelectedCameraId] = useState('');
 
   const { currentUser } = useAuth();
   const currentUserId = currentUser.userId;
+
+  // Sử dụng WebSocket để lắng nghe cập nhật về thiết bị đèn
+  const { isConnected, lastMessage, error: wsError } = useWebSocket({
+    autoConnect: true,
+    events: ['camera-update']
+  });
   const handleEditPopup = (cameraId) => {
     setIsOpenEditPopup(true);
     setSelectedCameraId(cameraId);
@@ -26,11 +35,15 @@ function CameraTable() {
     setIsOpenCameraView(true);
     setSelectedCameraId(cameraId);
   }
+  const handleOpenRecordingsModal = (cameraId) => {
+    setIsOpenRecordingsModal(true);
+    setSelectedCameraId(cameraId);
+  }
   const handleClosePopup = () => {
     setIsOpenCameraView(false);
     setIsOpenEditPopup(false);
     setIsOpenActivityModal(false);
-
+    setIsOpenRecordingsModal(false);
   };
   useEffect(() => {
 
@@ -58,6 +71,33 @@ function CameraTable() {
 
     fetchCameras();
   }, []);
+   // khi có sự kiện light-update thì cập nhật lại danh sách đèn
+   useEffect(() => {
+    if (lastMessage && lastMessage.type === 'light-update') {
+      // lấy về dữ liệu các đèn từ backend
+      const fetchCameras = async () => {
+        try {
+          const response = await fetch(`http://192.168.1.100:8080/camera/${currentUserId}`);
+          if (response.ok) {
+            const data = await response.json();
+            if (data.length > 0) {
+              setCameras(data);
+            }
+            else {
+              return (
+                <div>
+                  <h1>No lights found</h1>
+                </div>
+              )
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching lights:', error);
+        }
+      };
+      fetchCameras()
+    }
+  }, [lastMessage]);
 
   const handleRefreshCamera = async (cameraId) => {
     try {
@@ -134,7 +174,7 @@ function CameraTable() {
               <div className="cell status">
                 Status:
                 {camera.cameraStatus === 1 && <span className="status-on">Connected</span>}
-                {camera.cameraStatus === null && <span className="status-on">Disconnected</span>}
+                {camera.cameraStatus === 0 && <span className="status-on">Disconnected</span>}
               </div>
   
               <div className="cell action">
@@ -147,12 +187,20 @@ function CameraTable() {
                   </button>
                 )}
                 {camera.cameraStatus === 1 && (
-                  <button
-                    className="action-button"
-                    onClick={() => handleOpenCameraView(camera.cameraId)}
-                  >
-                    View
-                  </button>
+                  <>
+                    <button
+                      className="action-button"
+                      onClick={() => handleOpenCameraView(camera.cameraId)}
+                    >
+                      View
+                    </button>
+                    <button
+                      className="action-button recordings"
+                      onClick={() => handleOpenRecordingsModal(camera.cameraId)}
+                    >
+                      Recordings
+                    </button>
+                  </>
                 )}
               </div>
   
@@ -182,12 +230,21 @@ function CameraTable() {
         onAddDevice={deviceType}
         deviceId={selectedCameraId}
       />
-        {isOpenActivityModal && (
+
+      {isOpenActivityModal && (
         <DeviceActivityModal
           isOpen={isOpenActivityModal}
           onClose={handleClosePopup}
           deviceType={deviceType}
           deviceId={selectedCameraId}
+        />
+      )}
+
+      {isOpenRecordingsModal && (
+        <CameraRecordingsModal
+          isOpen={isOpenRecordingsModal}
+          onClose={handleClosePopup}
+          cameraId={selectedCameraId}
         />
       )}
     </div>
