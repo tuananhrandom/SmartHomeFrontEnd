@@ -80,7 +80,7 @@ function ChangePassword({ isOpen, onClose, onChangePassword }) {
           <button className="close-button" onClick={onClose}>✖</button>
         </div>
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
+          <div className="form-group-cp">
             <label>Mật khẩu hiện tại:</label>
             <input
               type="password"
@@ -90,7 +90,7 @@ function ChangePassword({ isOpen, onClose, onChangePassword }) {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="form-group-cp">
             <label>Mật khẩu mới:</label>
             <input
               type="password"
@@ -100,7 +100,7 @@ function ChangePassword({ isOpen, onClose, onChangePassword }) {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="form-group-cp">
             <label>Xác nhận mật khẩu mới:</label>
             <input
               type="password"

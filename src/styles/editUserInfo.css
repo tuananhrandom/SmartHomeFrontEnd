@@ -34,28 +34,28 @@
   font-size: 1.5rem;
 }
 
-.form-group {
+.form-group-editdetail {
   margin-bottom: 20px;
 }
 
-.form-group label {
+.form-group-editdetail label {
   display: block;
   margin-bottom: 8px;
   color: #666;
   font-weight: 500;
 }
 
-.form-group input {
-  width: 100%;
+.form-group-editdetail input {
+  width: 96%;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 16px;
 }
 
-.form-group input:focus {
+.form-group-editdetail input:focus {
   outline: none;
-  border-color: #2196f3;
+  border-color: #7acfe9;
   box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
 }
 

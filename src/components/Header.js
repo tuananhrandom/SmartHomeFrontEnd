@@ -61,7 +61,7 @@ function Header() {
   const handleUpdateUserInfo = async (formData) => {
     try {
       // Gọi API cập nhật thông tin người dùng
-      const response = await fetch('http://192.168.1.100:8080/api/users/update', {
+      const response = await fetch('http://192.168.1.100:8080/api/auth/profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -151,7 +151,7 @@ function Header() {
       <EditUserInfo 
         isOpen={showEditInfo}
         onClose={() => setShowEditInfo(false)}
-        onSave={handleUpdateUserInfo}
+        // onSave={handleUpdateUserInfo}
       />
 
       {/* Modal ChangePassword */}
