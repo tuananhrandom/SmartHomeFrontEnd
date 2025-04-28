@@ -110,4 +110,148 @@
 
 .retry-button:hover {
   background-color: #1976d2;
+}
+
+/* Phần CSS cho điều khiển camera */
+.camera-controls {
+  margin-top: 20px;
+}
+
+.control-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.control-header h3 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.rotation-status {
+  font-size: 0.9rem;
+  padding: 5px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 10px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.rotation-status.rotating {
+  background-color: #fff8e1;
+  color: #ff8f00;
+  border: 1px solid #ffe082;
+  animation: pulse 1.5s infinite;
+}
+
+.rotation-status.rotated {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #a5d6a7;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+
+.control-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  margin: 0 auto;
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.horizontal-controls {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.control-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 
+              inset 0 -2px 5px rgba(0, 0, 0, 0.05),
+              inset 0 2px 5px rgba(255, 255, 255, 0.8);
+  color: #2196f3;
+  font-size: 18px;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.control-button:hover {
+  background: linear-gradient(145deg, #f8f8f8, #e8e8e8);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15), 
+              inset 0 -2px 5px rgba(0, 0, 0, 0.05),
+              inset 0 2px 5px rgba(255, 255, 255, 0.8);
+}
+
+.control-button:active {
+  background: linear-gradient(145deg, #e8e8e8, #f8f8f8);
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 
+              inset 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.control-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.control-button svg {
+  width: 24px;
+  height: 24px;
+  stroke: #1976d2;
+  stroke-width: 2;
+}
+
+/* Tạo hiệu ứng đẹp mắt khi hover */
+.control-button:hover:not(:disabled) svg {
+  stroke: #0d47a1;
+}
+
+/* Thêm phần popup overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1002;
+  display: none;
+}
+
+.popup-overlay-show {
+  display: block;
 } 

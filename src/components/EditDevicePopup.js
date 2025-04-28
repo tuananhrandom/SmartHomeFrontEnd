@@ -51,7 +51,14 @@ function EditDevicePopup({ isOpen, onClose, deviceType, onAddDevice, deviceId })
         cameraId: deviceId,
         cameraName: deviceName
       };
-      endpoint = 'http://192.168.1.100:8080/camera/newCamera';
+      if(userRole === 'admin'){
+        //fetch về backend có @requestParam userId
+
+        endpoint = `http://192.168.1.100:8080/camera/admin/newcamera?userId=${currentUserId}`;
+      }
+      else{
+        endpoint = `http://192.168.1.100:8080/camera/newcamera?userId=${currentUserId}`;
+      }
     }
 
     try {

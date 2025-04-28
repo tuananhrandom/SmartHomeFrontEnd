@@ -73,7 +73,7 @@ function CameraTable() {
   }, []);
    // khi có sự kiện light-update thì cập nhật lại danh sách đèn
    useEffect(() => {
-    if (lastMessage && lastMessage.type === 'light-update') {
+    if (lastMessage && lastMessage.type === 'camera-update') {
       // lấy về dữ liệu các đèn từ backend
       const fetchCameras = async () => {
         try {
@@ -86,13 +86,13 @@ function CameraTable() {
             else {
               return (
                 <div>
-                  <h1>No lights found</h1>
+                  <h1>No Camera found</h1>
                 </div>
               )
             }
           }
         } catch (error) {
-          console.error('Error fetching lights:', error);
+          console.error('Error fetching camera:', error);
         }
       };
       fetchCameras()
@@ -178,7 +178,7 @@ function CameraTable() {
               </div>
   
               <div className="cell action">
-                {camera.cameraStatus === null && (
+                {camera.cameraStatus === 0 && (
                   <button
                     className="action-button refresh"
                     onClick={() => handleRefreshCamera(camera.cameraId)}
@@ -194,16 +194,18 @@ function CameraTable() {
                     >
                       View
                     </button>
-                    <button
+                    
+                  </>
+                )}
+
+                <button
                       className="action-button recordings"
                       onClick={() => handleOpenRecordingsModal(camera.cameraId)}
                     >
-                      Recordings
+                      Records
                     </button>
-                  </>
-                )}
               </div>
-  
+                
               <div className="cell delete">
                 <button
                   className="delete-button"
