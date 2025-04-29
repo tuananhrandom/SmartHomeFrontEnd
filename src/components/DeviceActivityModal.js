@@ -53,7 +53,7 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
             } else if (filterType === 'connection') {
               return ['CONNECT', 'DISCONNECT'].includes(activity.activityType);
             } else if (filterType === 'door') {
-              return ['OPEN', 'CLOSE', 'ALARM_ON', 'ALARM_OFF'].includes(activity.activityType);
+              return ['OPEN', 'CLOSE', 'ALARM_ON', 'ALARM_OFF', 'WARNING'].includes(activity.activityType);
             } else if (filterType === 'camera') {
               return ['STREAM_START', 'STREAM_END'].includes(activity.activityType);
             }
@@ -82,6 +82,7 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
       case 'CLOSE': return 'activity-close';
       case 'ALARM_ON': return 'activity-alarm-on';
       case 'ALARM_OFF': return 'activity-alarm-off';
+      case 'WARNING': return 'activity-warning'
       case 'STREAM_START': return 'activity-stream-start';
       case 'STREAM_END': return 'activity-stream-end';
       default: return '';
@@ -92,12 +93,13 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
     switch (activityType) {
       case 'ON': return 'Light.png';
       case 'OFF': return 'Light-1.png';
-      case 'CONNECT': return '🔌';
-      case 'DISCONNECT': return 'Light-2.png';
-      case 'OPEN': return '🔓';
-      case 'CLOSE': return '🔒';
-      case 'ALARM_ON': return '🚨';
-      case 'ALARM_OFF': return '🔕';
+      case 'CONNECT': return 'connect.png';
+      case 'DISCONNECT': return 'disconnect.png';
+      case 'OPEN': return 'door-1.png';
+      case 'CLOSE': return 'door.png';
+      case 'ALARM_ON': return 'alert-on.png';
+      case 'ALARM_OFF': return 'alert-off.png';
+      case 'WARNING': return 'warning.png'
       case 'STREAM_START': return '📹';
       case 'STREAM_END': return '📷';
       default: return '📝';
@@ -114,6 +116,7 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
       case 'CLOSE': return 'Đóng';
       case 'ALARM_ON': return 'Bật báo động';
       case 'ALARM_OFF': return 'Tắt báo động';
+      case 'WARNING': return 'Phát hiện xâm nhập'
       case 'STREAM_START': return 'Bắt đầu ghi hình';
       case 'STREAM_END': return 'Kết thúc ghi hình';
       default: return activityType;
