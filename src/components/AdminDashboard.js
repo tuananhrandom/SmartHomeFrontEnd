@@ -38,7 +38,7 @@ const AdminDashboard = () => {
   const fetchAllDevices = async () => {
     try {
       // Fetch lights
-      const lightsResponse = await fetch("http://192.168.1.100:8080/light/all", {
+      const lightsResponse = await fetch(`${BACKEND_URL}/light/all`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -47,7 +47,7 @@ const AdminDashboard = () => {
       setDevices((prev) => ({ ...prev, lights: lightsData }));
 
       // Fetch doors
-      const doorsResponse = await fetch("http://192.168.1.100:8080/door/all", {
+      const doorsResponse = await fetch(`${BACKEND_URL}/door/all`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -56,7 +56,7 @@ const AdminDashboard = () => {
       setDevices((prev) => ({ ...prev, doors: doorsData }));
 
       // Fetch cameras
-      const camerasResponse = await fetch("http://192.168.1.100:8080/camera/all", {
+      const camerasResponse = await fetch(`${BACKEND_URL}/camera/all`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

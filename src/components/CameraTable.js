@@ -5,6 +5,7 @@ import EditDevicePopup from './EditDevicePopup';
 import DeviceActivityModal from './DeviceActivityModal';
 import CameraRecordingsModal from './CameraRecordingsModal';
 import useWebSocket from '../hooks/useWebSocket';
+import { BACKEND_URL } from '../config/api';
 
 function CameraTable() {
   const deviceType = "Camera";
@@ -50,7 +51,7 @@ function CameraTable() {
     // Fetch cameras data
     const fetchCameras = async () => {
       try {
-        const response = await fetch(`http://192.168.1.100:8080/camera/${currentUserId}`);
+        const response = await fetch(`${BACKEND_URL}/camera/${currentUserId}`);
         if (response.ok) {
           const data = await response.json();
           if(data.length > 0){
@@ -77,7 +78,7 @@ function CameraTable() {
       // lấy về dữ liệu các đèn từ backend
       const fetchCameras = async () => {
         try {
-          const response = await fetch(`http://192.168.1.100:8080/camera/${currentUserId}`);
+          const response = await fetch(`${BACKEND_URL}/camera/${currentUserId}`);
           if (response.ok) {
             const data = await response.json();
             if (data.length > 0) {

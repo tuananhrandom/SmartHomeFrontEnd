@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/CameraRecordingsModal.css';
-
+import { BACKEND_URL } from '../config/api';
 function CameraRecordingsModal({ isOpen, onClose, cameraId }) {
   const [recordings, setRecordings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,7 +16,7 @@ function CameraRecordingsModal({ isOpen, onClose, cameraId }) {
   const fetchRecordings = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://192.168.1.100:8080/camera/video/all/${cameraId}`);
+      const response = await fetch(`${BACKEND_URL}/camera/video/all/${cameraId}`);
       if (!response.ok) {
         throw new Error('Không thể tải dữ liệu video');
       }
@@ -34,7 +34,7 @@ function CameraRecordingsModal({ isOpen, onClose, cameraId }) {
   const handleDeleteRecording = async (id) => {
     if (window.confirm('Bạn có chắc chắn muốn xóa video này không?')) {
       try {
-        const response = await fetch(`http://192.168.1.100:8080/camera/${id}`, {
+        const response = await fetch(`${BACKEND_URL}/camera/${id}`, {
           method: 'DELETE',
         });
         
@@ -115,7 +115,7 @@ function CameraRecordingsModal({ isOpen, onClose, cameraId }) {
             </div>
             <div className="video-player">
               <video controls autoPlay width="100%">
-                <source src={`http://192.168.1.100:8080/camera/video/${selectedVideo.id}`} type="video/mp4" />
+                <source src={`${BACKEND_URL}/camera/video/${selectedVideo.id}`} type="video/mp4" />
                 Trình duyệt của bạn không hỗ trợ phát video.
               </video>
             </div>

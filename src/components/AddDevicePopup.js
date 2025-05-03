@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-
+import { BACKEND_URL } from '../config/api';
 function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDeviceType }) {
   const [deviceType, setDeviceType] = useState(currentDeviceType || deviceTypes[0] || 'Light');
   const [deviceId, setDeviceId] = useState('');
