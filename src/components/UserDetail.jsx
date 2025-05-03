@@ -87,12 +87,12 @@ function UserDetail({ isOpen, onClose, onEditInfo, onChangePassword }) {
             </div>
             <div className="info-group">
               <label>Ngày tạo tài khoản:</label>
-              <span>{new Date(userData.createdAt).toLocaleDateString('vi-VN')}</span>
+              <span>{userData.dateCreate}</span>
             </div>
-            <div className="info-group">
+            {/* <div className="info-group">
               <label>Vai trò:</label>
               <span>{userData.role}</span>
-            </div>
+            </div> */}
           </div>
           <div className="user-stats">
             <h3>Thống kê</h3>
