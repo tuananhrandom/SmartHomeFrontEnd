@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../styles/cameraView.css';
 import { useAuth } from '../contexts/AuthContext';
+import { BACKEND_URL_WS } from '../config/api';
 
 const CameraView = ({selectedCameraId ,isOpen, OnClose }) => {
   const { currentUser } = useAuth();
@@ -18,7 +19,7 @@ const CameraView = ({selectedCameraId ,isOpen, OnClose }) => {
     // Chỉ kết nối khi cả isOpen và selectedCameraId đều có giá trị
     if (isOpen && selectedCameraId) {
       // Khởi tạo kết nối WebSocket
-      const ws = new WebSocket(`ws://192.168.1.100:8080/ws/camera/livecamera`);
+      const ws = new WebSocket(`${BACKEND_URL_WS}/ws/camera/livecamera`);
       wsRef.current = ws;
 
       ws.onopen = () => {
@@ -41,13 +42,22 @@ const CameraView = ({selectedCameraId ,isOpen, OnClose }) => {
       };
 
       ws.onmessage = (event) => {
+        // if (event.data instanceof Blob) {
+        //   const imageUrl = URL.createObjectURL(event.data);
+        //   if (videoRef.current) {
+        //     videoRef.current.src = imageUrl;
+        //   }
+        //   // Clean up URL object after image is loaded
+        //   setTimeout(() => URL.revokeObjectURL(imageUrl), 1000);
         if (event.data instanceof Blob) {
-          const imageUrl = URL.createObjectURL(event.data);
+          const blob = new Blob([event.data], { type: 'image/jpeg' }); // Chỉ định rõ kiểu dữ liệu
+          const imageUrl = URL.createObjectURL(blob);
           if (videoRef.current) {
+            videoRef.current.onload = () => {
+              URL.revokeObjectURL(imageUrl); // Dọn dẹp sau khi tải xong
+            };
             videoRef.current.src = imageUrl;
           }
-          // Clean up URL object after image is loaded
-          setTimeout(() => URL.revokeObjectURL(imageUrl), 1000);
         } else if (typeof event.data === 'string') {
           // Xử lý các tin nhắn phản hồi từ server
           try {
@@ -98,7 +108,7 @@ const CameraView = ({selectedCameraId ,isOpen, OnClose }) => {
     
     // Khởi tạo lại kết nối nếu component đang mở
     if (isOpen && selectedCameraId) {
-      const ws = new WebSocket(`ws://192.168.1.100:8080/ws/camera/livecamera`);
+      const ws = new WebSocket(`${BACKEND_URL_WS}/ws/camera/livecamera`);
       wsRef.current = ws;
 
       ws.onopen = () => {
@@ -185,11 +195,19 @@ const CameraView = ({selectedCameraId ,isOpen, OnClose }) => {
           </div>
         ) : (
           <div className="video-container">
+            {/* <img
+              ref={videoRef}
+              className="camera-feed"
+              alt="Camera feed"
+              style={{ display: isConnected ? 'block' : 'none' }}
+            /> */}
             <img
               ref={videoRef}
               className="camera-feed"
               alt="Camera feed"
               style={{ display: isConnected ? 'block' : 'none' }}
+              crossOrigin="anonymous"
+              playsInline // Hỗ trợ iOS
             />
             {!isConnected && (
               <div className="loading-message">

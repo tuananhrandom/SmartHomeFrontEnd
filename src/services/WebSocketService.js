@@ -1,4 +1,5 @@
 import { isTokenExpired } from './authService';
+import { BACKEND_URL_WS } from '../config/api';
 class WebSocketService {
   constructor() {
     this.socket = null;
@@ -34,7 +35,7 @@ class WebSocketService {
     }
 
     // Tạo kết nối WebSocket với token
-    const wsUrl = `ws://192.168.1.100:8080/ws/client?token=${token}`;
+    const wsUrl = `${BACKEND_URL_WS}/ws/client?token=${token}`;
     
     try {
       this.socket = new WebSocket(wsUrl);

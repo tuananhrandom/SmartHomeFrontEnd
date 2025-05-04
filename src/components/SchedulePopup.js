@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BACKEND_URL } from '../config/api';
 
 function SchedulePopup({ isOpen, onClose, deviceType, deviceId, userId }) {
   const [schedules, setSchedules] = useState([]);
@@ -8,7 +9,7 @@ function SchedulePopup({ isOpen, onClose, deviceType, deviceId, userId }) {
     isActive: true,
     daysOfWeek: '1,2,3,4,5,6,7' // Mặc định chọn tất cả các ngày
   });
-  
+
   const daysMap = {
     '1': 'T2',
     '2': 'T3',
@@ -28,7 +29,7 @@ function SchedulePopup({ isOpen, onClose, deviceType, deviceId, userId }) {
 
   const fetchSchedules = async () => {
     try {
-      const response = await fetch(`http://192.168.1.100:8080/api/schedules/device/${deviceType.toLowerCase()}/${deviceId}`);
+      const response = await fetch(`${BACKEND_URL}/api/schedules/device/${deviceType.toLowerCase()}/${deviceId}`);
       console.log("vừa fetch về schedules xong");
       if (response.ok) {
         const data = await response.json();
@@ -86,7 +87,7 @@ function SchedulePopup({ isOpen, onClose, deviceType, deviceId, userId }) {
     try {
       let test = JSON.stringify(scheduleData)
       console.log(test);
-      const response = await fetch('http://192.168.1.100:8080/api/schedules', {
+      const response = await fetch(`${BACKEND_URL}/api/schedules`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -108,7 +109,7 @@ function SchedulePopup({ isOpen, onClose, deviceType, deviceId, userId }) {
 
   const toggleSchedule = async (scheduleId, isActive) => {
     try {
-      const response = await fetch(`http://192.168.1.100:8080/api/schedules/${scheduleId}/toggle?isActive=${!isActive}`, {
+      const response = await fetch(`${BACKEND_URL}/api/schedules/${scheduleId}/toggle?isActive=${!isActive}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -126,7 +127,7 @@ function SchedulePopup({ isOpen, onClose, deviceType, deviceId, userId }) {
   const deleteSchedule = async (scheduleId) => {
     console.log(scheduleId);
     try {
-      const response = await fetch(`http://192.168.1.100:8080/api/schedules/${scheduleId}`, {
+      const response = await fetch(`${BACKEND_URL}/api/schedules/${scheduleId}`, {
         method: 'DELETE'
       });
 

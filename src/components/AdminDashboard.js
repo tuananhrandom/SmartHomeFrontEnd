@@ -5,7 +5,7 @@ import DeviceSelector from "./DeviceSelector";
 import Footer from "./Footer";
 import { useAuth } from "../contexts/AuthContext";
 import AddDevicePopup from "./AddDevicePopup";
-
+import { BACKEND_URL } from "../config/api";
 const AdminDashboard = () => {
   const [selectedDevice, setSelectedDevice] = useState("Light");
   const [isPopupOpen, setIsPopupOpen] = useState(false);

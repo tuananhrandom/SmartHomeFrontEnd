@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../styles/userDetail.css';
 import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { BACKEND_URL } from '../config/api';
 function UserDetail({ isOpen, onClose, onEditInfo, onChangePassword }) {
   const navigate = useNavigate();
   const{currentUser, logout} = useAuth();
@@ -23,7 +24,7 @@ function UserDetail({ isOpen, onClose, onEditInfo, onChangePassword }) {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://192.168.1.100:8080/api/auth/me', {
+        const response = await fetch(`${BACKEND_URL}/api/auth/me`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
@@ -41,7 +42,7 @@ function UserDetail({ isOpen, onClose, onEditInfo, onChangePassword }) {
 
     // const fetchUserStats = async () => {
     //   try {
-    //     const response = await fetch('http://192.168.1.100:8080/api/users/stats', {
+    //     const response = await fetch('${BACKEND_URL}/api/users/stats', {
     //       headers: {
     //         'Authorization': `Bearer ${localStorage.getItem('token')}`
     //       }

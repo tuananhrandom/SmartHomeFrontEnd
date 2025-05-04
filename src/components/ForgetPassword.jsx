@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "../styles/auth.css";
-
+import { BACKEND_URL } from "../config/api";
 const ForgetPassword = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -26,7 +26,7 @@ const ForgetPassword = () => {
       // Đảm bảo xóa token trước khi gửi yêu cầu quên mật khẩu
       localStorage.removeItem('token');
       
-      const response = await fetch(`http://192.168.1.100:8080/api/auth/forget?email=${email}`, {
+      const response = await fetch(`${BACKEND_URL}/api/auth/forget?email=${email}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

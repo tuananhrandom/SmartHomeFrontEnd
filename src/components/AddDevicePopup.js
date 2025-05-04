@@ -17,7 +17,7 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDevi
   }, [currentDeviceType]);
 
   const handleSubmit = async () => {
-    if (userRole != 'ADMIN') {
+    if (userRole !== 'ADMIN') {
       
       if (!deviceId || !deviceName) {
         alert('Please fill in all fields');
@@ -41,10 +41,10 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDevi
       if(userRole === 'ADMIN'){
         //fetch về backend có @requestParam userId
 
-        endpoint = `http://192.168.1.100:8080/light/admin/newlight?lightId=${deviceId}`;
+        endpoint = `${BACKEND_URL}/light/admin/newlight?lightId=${deviceId}`;
       }
       else{
-        endpoint = `http://192.168.1.100:8080/light/newlight?userId=${currentUserId}`;
+        endpoint = `${BACKEND_URL}/light/newlight?userId=${currentUserId}`;
       }
     } else if (deviceType === 'Door') {
       data = {
@@ -55,10 +55,10 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDevi
       if(userRole === 'ADMIN'){
         //fetch về backend có @requestParam userId
 
-        endpoint = `http://192.168.1.100:8080/door/admin/newdoor?doorId=${deviceId}`;
+        endpoint = `${BACKEND_URL}/door/admin/newdoor?doorId=${deviceId}`;
       }
       else{
-        endpoint = `http://192.168.1.100:8080/door/newdoor?userId=${currentUserId}`;
+        endpoint = `${BACKEND_URL}/door/newdoor?userId=${currentUserId}`;
       }
     } else if (deviceType === 'Camera') {
       data = {
@@ -68,10 +68,10 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDevi
       if(userRole === 'ADMIN'){
         //fetch về backend có @requestParam userId
 
-        endpoint = `http://192.168.1.100:8080/camera/admin/newcamera?cameraId=${deviceId}`;
+        endpoint = `${BACKEND_URL}/camera/admin/newcamera?cameraId=${deviceId}`;
       }
       else{
-        endpoint = `http://192.168.1.100:8080/camera/newcamera?userId=${currentUserId}`;
+        endpoint = `${BACKEND_URL}/camera/newcamera?userId=${currentUserId}`;
       }
     }
 
@@ -131,7 +131,7 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDevi
               value={deviceId}
               onChange={(e) => setDeviceId(e.target.value)}
             />
-            {userRole != 'ADMIN' && <input type="text" id="deviceName" placeholder="Device Name"value={deviceName}onChange={(e) => setDeviceName(e.target.value)}
+            {userRole !== 'ADMIN' && <input type="text" id="deviceName" placeholder="Device Name"value={deviceName}onChange={(e) => setDeviceName(e.target.value)}
             />}
 
           </div>

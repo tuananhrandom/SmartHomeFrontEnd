@@ -4,6 +4,7 @@ import useWebSocket from '../hooks/useWebSocket';
 import EditDevicePopup from './EditDevicePopup';
 import SchedulePopup from './SchedulePopup';
 import DeviceActivityModal from './DeviceActivityModal';
+import { BACKEND_URL } from '../config/api';
 function DoorTable() {
   const deviceType = 'Door';
   const[isOpenSchedulePopup, setIsOpenSchedulePopup] = useState(false);
@@ -34,7 +35,7 @@ function DoorTable() {
     // Fetch doors data
     const fetchDoors = async () => {
       try {
-        const response = await fetch(`http://192.168.1.100:8080/door/${currentUserId}`);
+        const response = await fetch(`${BACKEND_URL}/door/${currentUserId}`);
         if (response.ok) {
           const data = await response.json();
           if(data.length > 0){
@@ -61,7 +62,7 @@ function DoorTable() {
       // lấy về dữ liệu các đèn từ backend
     const fetchLights = async () => {
       try {
-        const response = await fetch(`http://192.168.1.100:8080/door/${currentUserId}`);
+        const response = await fetch(`${BACKEND_URL}/door/${currentUserId}`);
         if (response.ok) {
           const data = await response.json();
           if(data.length > 0){
@@ -91,7 +92,7 @@ function DoorTable() {
     const newLockDown = door.doorLockDown === 1 ? 0 : 1;
     
     try {
-      const response = await fetch(`http://192.168.1.100:8080/door/toggle?doorId=${door.doorId}&userId=${currentUserId}`, {
+      const response = await fetch(`${BACKEND_URL}/door/toggle?doorId=${door.doorId}&userId=${currentUserId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -115,7 +116,7 @@ function DoorTable() {
 
   const handleRefreshDoor = async (doorId) => {
     try {
-      const response = await fetch(`http://192.168.1.100:8080/door/${currentUserId}`, {
+      const response = await fetch(`${BACKEND_URL}/door/${currentUserId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -144,7 +145,7 @@ function DoorTable() {
 
   const handleCheckDoor = async (doorId) => {
     try {
-      const response = await fetch(`http://192.168.1.100:8080/door/check/${doorId}`, {
+      const response = await fetch(`${BACKEND_URL}/door/check/${doorId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -168,7 +169,7 @@ function DoorTable() {
 
   const handleDeleteDoor = async (doorId) => {
     try {
-      const response = await fetch(`http://192.168.1.100:8080/door/user/delete?doorId=${doorId}&userId=${currentUserId}`, {
+      const response = await fetch(`${BACKEND_URL}/door/user/delete?doorId=${doorId}&userId=${currentUserId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-
+import { BACKEND_URL } from '../config/api';
 function EditDevicePopup({ isOpen, onClose, deviceType, onAddDevice, deviceId }) {
   // const [deviceType, setDeviceType] = useState(currentDeviceType || deviceTypes[0] || 'Light');
   // const [deviceId, setDeviceId] = useState('');
@@ -27,10 +27,10 @@ function EditDevicePopup({ isOpen, onClose, deviceType, onAddDevice, deviceId })
       if(userRole === 'admin'){
         //fetch về backend có @requestParam userId
 
-        endpoint = `http://192.168.1.100:8080/light/admin/newlight?userId=${currentUserId}`;
+        endpoint = `${BACKEND_URL}/light/admin/newlight?userId=${currentUserId}`;
       }
       else{
-        endpoint = `http://192.168.1.100:8080/light/newlight?userId=${currentUserId}`;
+        endpoint = `${BACKEND_URL}/light/newlight?userId=${currentUserId}`;
       }
     } else if (deviceType === 'Door') {
       data = {
@@ -41,10 +41,10 @@ function EditDevicePopup({ isOpen, onClose, deviceType, onAddDevice, deviceId })
       if(userRole === 'admin'){
         //fetch về backend có @requestParam userId
 
-        endpoint = `http://192.168.1.100:8080/door/admin/newdoor?userId=${currentUserId}`;
+        endpoint = `${BACKEND_URL}/door/admin/newdoor?userId=${currentUserId}`;
       }
       else{
-        endpoint = `http://192.168.1.100:8080/door/newdoor?userId=${currentUserId}`;
+        endpoint = `${BACKEND_URL}/door/newdoor?userId=${currentUserId}`;
       }
     } else if (deviceType === 'Camera') {
       data = {
@@ -54,10 +54,10 @@ function EditDevicePopup({ isOpen, onClose, deviceType, onAddDevice, deviceId })
       if(userRole === 'admin'){
         //fetch về backend có @requestParam userId
 
-        endpoint = `http://192.168.1.100:8080/camera/admin/newcamera?userId=${currentUserId}`;
+        endpoint = `${BACKEND_URL}/camera/admin/newcamera?userId=${currentUserId}`;
       }
       else{
-        endpoint = `http://192.168.1.100:8080/camera/newcamera?userId=${currentUserId}`;
+        endpoint = `${BACKEND_URL}/camera/newcamera?userId=${currentUserId}`;
       }
     }
 

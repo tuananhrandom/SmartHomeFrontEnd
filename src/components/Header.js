@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import useWebSocket from '../hooks/useWebSocket';
 import EditUserInfo from './EditUserInfo';
 import ChangePassword from './ChangePassword';
-
+import { BACKEND_URL } from '../config/api';
 function Header() {
   
   const [showNotifications, setShowNotifications] = useState(false);
@@ -61,7 +61,7 @@ function Header() {
   const handleUpdateUserInfo = async (formData) => {
     try {
       // Gọi API cập nhật thông tin người dùng
-      const response = await fetch('http://192.168.1.100:8080/api/auth/profile', {
+      const response = await fetch(`${BACKEND_URL}/api/auth/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ function Header() {
   const handlePasswordChange = async (formData) => {
     try {
       // Gọi API đổi mật khẩu
-      const response = await fetch('http://192.168.1.100:8080/api/auth/change-password', {
+      const response = await fetch('${BACKEND_URL}/api/auth/change-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

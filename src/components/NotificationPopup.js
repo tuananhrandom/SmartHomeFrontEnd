@@ -1,7 +1,7 @@
 import React, { useState, useEffect, forwardRef } from 'react';
 import useWebSocket from '../hooks/useWebSocket';
 import { useAuth } from '../contexts/AuthContext';
-
+import { BACKEND_URL } from '../config/api';
 const NotificationPopup = forwardRef((props, ref) => {
   const [notifications, setNotifications] = useState([]);
   const {currentUser}  = useAuth();
@@ -18,7 +18,7 @@ const NotificationPopup = forwardRef((props, ref) => {
       // lấy về dữ liệu thông báo từ backend
     const fetchNotifications = async () => {
       try {
-        const response = await fetch(`http://192.168.1.100:8080/notification/${currentUserId}`);
+        const response = await fetch(`${BACKEND_URL}/notification/${currentUserId}`);
         if (response.ok) {
           const data = await response.json();
           if(data.length > 0){
@@ -46,7 +46,7 @@ const NotificationPopup = forwardRef((props, ref) => {
     // Trong thực tế, bạn sẽ fetch dữ liệu từ API
     const fetchNotifications = async () => {
       try {
-        const response = await fetch(`http://192.168.1.100:8080/notification/${currentUserId}`);
+        const response = await fetch(`${BACKEND_URL}/notification/${currentUserId}`);
         if (response.ok) {
           const data = await response.json();
           setNotifications(data);

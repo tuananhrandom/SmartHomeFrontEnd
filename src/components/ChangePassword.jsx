@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import '../styles/changePassword.css';
 import { useNavigate } from 'react-router-dom';
-
+import { BACKEND_URL } from '../config/api';
 
 function ChangePassword({ isOpen, onClose, onChangePassword }) {
   const [formData, setFormData] = useState({

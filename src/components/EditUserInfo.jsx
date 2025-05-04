@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import '../styles/editUserInfo.css';
 import axios from 'axios';
-
+import { BACKEND_URL } from '../config/api';
 function EditUserInfo({ isOpen, onClose, onSave }) {
   const { currentUser } = useAuth();
   const [formData, setFormData] = useState({
@@ -30,7 +30,7 @@ function EditUserInfo({ isOpen, onClose, onSave }) {
     try {
       // Gọi API cập nhật thông tin tài khoản
       console.log('Đang gửi yêu cầu cập nhật với dữ liệu:', formData);
-      const response = await axios.put('http://192.168.1.100:8080/api/auth/profile', formData, {
+      const response = await axios.put(`${BACKEND_URL}/api/auth/profile`, formData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`

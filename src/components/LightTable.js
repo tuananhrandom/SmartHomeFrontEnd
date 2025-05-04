@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import EditDevicePopup from './EditDevicePopup';
 import SchedulePopup from './SchedulePopup';
 import DeviceActivityModal from './DeviceActivityModal';
-
+import { BACKEND_URL } from '../config/api';
 function LightTable() {
   const deviceType = 'Light';
   const [selectedLightId, setSelectedLightId] = useState('')
@@ -47,7 +47,7 @@ function LightTable() {
     // lấy về dữ liệu các đèn từ backend
     const fetchLights = async () => {
       try {
-        const response = await fetch(`http://192.168.1.100:8080/light/${currentUserId}`);
+        const response = await fetch(`${BACKEND_URL}/light/${currentUserId}`);
         if (response.ok) {
           const data = await response.json();
           if (data.length > 0) {
@@ -69,7 +69,7 @@ function LightTable() {
       // lấy về dữ liệu các đèn từ backend
       const fetchLights = async () => {
         try {
-          const response = await fetch(`http://192.168.1.100:8080/light/${currentUserId}`);
+          const response = await fetch(`${BACKEND_URL}/light/${currentUserId}`);
           if (response.ok) {
             const data = await response.json();
             if (data.length > 0) {
@@ -95,7 +95,7 @@ function LightTable() {
     const newStatus = light.lightStatus === 1 ? 0 : 1;
     
     try {
-      const response = await fetch(`http://192.168.1.100:8080/light/toggle?lightId=${Number(light.lightId)}&userId=${Number(currentUserId)}`, {
+      const response = await fetch(`${BACKEND_URL}/light/toggle?lightId=${Number(light.lightId)}&userId=${Number(currentUserId)}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -119,7 +119,7 @@ function LightTable() {
 
   const handleRefreshLight = async (lightId) => {
     try {
-      const response = await fetch(`http://192.168.1.100:8080/light/${currentUserId}`, {
+      const response = await fetch(`${BACKEND_URL}/light/${currentUserId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -139,7 +139,7 @@ function LightTable() {
 
   const handleDeleteLight = async (lightId) => {
     try {
-      const response = await fetch(`http://192.168.1.100:8080/light/delete/user?userId=${currentUserId}&lightId=${lightId}`, {
+      const response = await fetch(`${BACKEND_URL}/light/delete/user?userId=${currentUserId}&lightId=${lightId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'

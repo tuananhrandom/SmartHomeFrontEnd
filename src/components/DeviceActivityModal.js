@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import '../styles/DeviceActivityModal.css';
-
+import { BACKEND_URL } from '../config/api';
 function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
   const [activities, setActivities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,9 +30,9 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
         const start = formatToLocalISOString(startTime); // "2025-04-20T13:21:00"
         const end = formatToLocalISOString(endTime);
   
-        url = `http://192.168.1.100:8080/api/device-activities/time-range?deviceType=${deviceType}&deviceId=${deviceId}&startTime=${start}&endTime=${end}`;
+        url = `${BACKEND_URL}/api/device-activities/time-range?deviceType=${deviceType}&deviceId=${deviceId}&startTime=${start}&endTime=${end}`;
       } else {
-        url = `http://192.168.1.100:8080/api/device-activities/device?deviceType=${deviceType}&deviceId=${deviceId}`;
+        url = `${BACKEND_URL}/api/device-activities/device?deviceType=${deviceType}&deviceId=${deviceId}`;
       }
   
       const response = await fetch(url, {

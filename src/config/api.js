@@ -1,7 +1,11 @@
 // Cấu hình API cho ứng dụng
 
 // Địa chỉ server backend
-const BACKEND_URL = 'http://192.168.1.100:8080';
+// const BACKEND_URL = 'http://192.168.1.100:8080';
+// const BACKEND_URL_WS='ws://192.168.1.100:8080'
+const BACKEND_URL = 'http://smartsmart.ddns.net:8080';
+const BACKEND_URL_WS='ws://smartsmart.ddns.net:8080'
+
 
 // Đường dẫn cơ sở cho các API
 const API_BASE_URL = `${BACKEND_URL}/api`;
@@ -36,4 +40,4 @@ const API_ENDPOINTS = {
   }
 };
 
-export { BACKEND_URL, API_BASE_URL, API_ENDPOINTS }; 
+export { BACKEND_URL, API_BASE_URL, API_ENDPOINTS, BACKEND_URL_WS }; 
