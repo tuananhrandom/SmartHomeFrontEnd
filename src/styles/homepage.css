@@ -489,3 +489,131 @@ animation-iteration-count: 2;
 .view-button:hover {
   background-color: #1976d2;
 } 
+
+
+.row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eeeeee;
+  padding: 10px 0;
+  justify-content: space-between;
+  background-color: #B9E0E9;
+  transition: all 0.5s;
+  z-index: -100;
+  flex-wrap: nowrap; /* Thêm */
+}
+
+/* Thêm style mới cho điện thoại */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .header-right {
+    margin-top: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .row {
+    flex-wrap: wrap;
+  }
+  
+  .cell {
+    padding: 5px;
+    min-width: auto;
+  }
+  
+  .cell.image {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .cell.ip, .cell.id {
+    width: 45%;
+    font-size: 14px;
+  }
+  
+  .cell.status {
+    width: 100%;
+    text-align: left;
+    margin: 5px 0;
+  }
+  
+  .cell.action, .cell.delete {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+  }
+  
+  .action-button, .delete-button {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+}
+
+/* // xử lý responsive */
+.row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eeeeee;
+    padding: 10px 0;
+    justify-content: space-between;
+    background-color: #B9E0E9;
+    transition: all 0.5s;
+    z-index: -100;
+    flex-wrap: nowrap; /* Thêm */
+  }
+  
+  /* Thêm style mới cho điện thoại */
+  @media (max-width: 768px) {
+    .header {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .header-right {
+      margin-top: 10px;
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .row {
+      flex-wrap: wrap;
+    }
+    
+    .cell {
+      padding: 5px;
+      min-width: auto;
+    }
+    
+    .cell.image {
+      width: 40px;
+      height: 40px;
+    }
+    
+    .cell.ip, .cell.id {
+      width: 45%;
+      font-size: 14px;
+    }
+    
+    .cell.status {
+      width: 100%;
+      text-align: left;
+      margin: 5px 0;
+    }
+    
+    .cell.action, .cell.delete {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+    }
+    
+    .action-button, .delete-button {
+      font-size: 14px;
+      padding: 6px 10px;
+    }
+  }

@@ -219,7 +219,7 @@ function SchedulePopup({ isOpen, onClose, deviceType, deviceId, userId }) {
                   {schedules.map(schedule => (
                     <div key={schedule.id} className={`schedule-item ${schedule.isActive ? 'active' : 'inactive'}`}>
                       <div className="schedule-info">
-                        <div className="schedule-time">{schedule.time}</div>
+                        <div className="schedule-time">{schedule.timeCreate}</div>
                         <div className="schedule-action">
                           {schedule.action === "on" ? 'Bật' : 'Tắt'}
                         </div>

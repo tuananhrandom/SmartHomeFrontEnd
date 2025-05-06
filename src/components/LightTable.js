@@ -138,21 +138,23 @@ function LightTable() {
   };
 
   const handleDeleteLight = async (lightId) => {
-    try {
-      const response = await fetch(`${BACKEND_URL}/light/delete/user?userId=${currentUserId}&lightId=${lightId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
+    if(window.confirm('Bạn muốn loại bỏ thiết bị?')){
+      try {
+        const response = await fetch(`${BACKEND_URL}/light/delete/user?userId=${currentUserId}&lightId=${lightId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+  
+        if (response.ok) {
+          setLights(prevLights => prevLights.filter(light => light.lightId !== lightId));
+        } else {
+          console.error('Error deleting light');
         }
-      });
-
-      if (response.ok) {
-        setLights(prevLights => prevLights.filter(light => light.lightId !== lightId));
-      } else {
-        console.error('Error deleting light');
+      } catch (error) {
+        console.error('Network error:', error);
       }
-    } catch (error) {
-      console.error('Network error:', error);
     }
   };
 

@@ -85,7 +85,7 @@ function Header() {
   const handlePasswordChange = async (formData) => {
     try {
       // Gọi API đổi mật khẩu
-      const response = await fetch('${BACKEND_URL}/api/auth/change-password', {
+      const response = await fetch(`${BACKEND_URL}/api/auth/change-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

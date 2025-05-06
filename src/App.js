@@ -15,6 +15,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { useAuth } from './contexts/AuthContext';
 import TokenExpirationHandler from './components/TokenExpirationHandler';
 import ForgetPassword from './components/ForgetPassword';
+import './styles/responsive.css';
 
 // Component Dashboard chứa nội dung chính của ứng dụng
 const Dashboard = () => {

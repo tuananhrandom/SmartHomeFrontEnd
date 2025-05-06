@@ -168,21 +168,23 @@ function DoorTable() {
   };
 
   const handleDeleteDoor = async (doorId) => {
-    try {
-      const response = await fetch(`${BACKEND_URL}/door/user/delete?doorId=${doorId}&userId=${currentUserId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
+    if(window.confirm("Bạn muốn loại bỏ thiết bị?")){
+      try {
+        const response = await fetch(`${BACKEND_URL}/door/user/delete?doorId=${doorId}&userId=${currentUserId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+  
+        if (response.ok) {
+          setDoors(prevDoors => prevDoors.filter(door => door.doorId !== doorId));
+        } else {
+          console.error('Error deleting door');
         }
-      });
-
-      if (response.ok) {
-        setDoors(prevDoors => prevDoors.filter(door => door.doorId !== doorId));
-      } else {
-        console.error('Error deleting door');
+      } catch (error) {
+        console.error('Network error:', error);
       }
-    } catch (error) {
-      console.error('Network error:', error);
     }
   };
 

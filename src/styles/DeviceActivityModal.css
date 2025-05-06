@@ -345,3 +345,46 @@
     gap: 4px;
   }
 } 
+
+
+
+/* responsive  */
+@media (max-width: 768px) {
+  .device-activity-modal {
+    width: 95%;
+    padding: 0;
+  }
+  
+  .device-activity-modal-content {
+    width: 100%;
+    padding: 10px;
+  }
+  
+  .device-activity-header {
+    padding: 10px;
+  }
+  
+  .device-activity-header h2 {
+    font-size: 18px;
+  }
+  
+  .device-activity-body {
+    padding: 10px;
+  }
+  
+  .activity-chart {
+    height: 200px;
+  }
+  
+  .activity-list {
+    max-height: 250px;
+  }
+  
+  .activity-item {
+    padding: 8px;
+  }
+  
+  .activity-time, .activity-action {
+    font-size: 14px;
+  }
+}

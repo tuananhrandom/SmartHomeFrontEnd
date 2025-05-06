@@ -255,3 +255,36 @@
 .popup-overlay-show {
   display: block;
 } 
+
+
+/* responsive  */
+@media (max-width: 768px) {
+  .camera-view-modal {
+    width: 95%;
+    padding: 0;
+  }
+  
+  .camera-view-modal-content {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+  }
+  
+  .camera-stream {
+    height: auto;
+    max-height: 60vh;
+  }
+  
+  .camera-controls {
+    padding: 10px;
+  }
+  
+  .control-button {
+    padding: 8px;
+    font-size: 12px;
+  }
+  
+  .camera-info {
+    font-size: 14px;
+  }
+}

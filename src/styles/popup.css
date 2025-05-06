@@ -28,8 +28,8 @@
 }
 
 .schedule-popup .popup-header {
-  background: linear-gradient(135deg, #3a7bd5, #00d2ff);
-  color: white;
+  background: linear-gradient(90deg, #B9E0E9, #B2D1D6);
+  color: rgb(49, 49, 49);
   padding: 15px 20px;
   display: flex;
   justify-content: space-between;
@@ -114,8 +114,8 @@
 }
 
 .add-schedule-button {
-  background: linear-gradient(135deg, #3a7bd5, #00d2ff);
-  color: white;
+  background: linear-gradient(90deg, #B9E0E9, #B2D1D6);
+  color: rgb(39, 39, 39);
   border: none;
   padding: 12px 20px;
   border-radius: 4px;
@@ -244,3 +244,60 @@
   background-color: #85a0a7;
   transform: scale(1.1);
 } 
+
+/* Cập nhật responsive cho popup */
+@media (max-width: 768px) {
+  .schedule-popup {
+    width: 95%;
+    max-width: none;
+    height: 80%;
+  }
+  
+  .schedule-popup-content {
+    border-radius: 8px;
+  }
+  
+  .schedule-popup .popup-header {
+    padding: 10px;
+  }
+  
+  .schedule-popup .popup-header h2 {
+    font-size: 18px;
+  }
+  
+  .schedule-popup .popup-body {
+    grid-template-columns: 1fr;
+    padding: 15px;
+    gap: 15px;
+    overflow-y: auto;
+  }
+  
+  .form-group input[type="time"],
+  .form-group select {
+    padding: 8px;
+  }
+  
+  .days-selector {
+    gap: 3px;
+  }
+  
+  .day-button {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+  
+  .add-schedule-button {
+    padding: 10px 15px;
+  }
+  
+  .schedule-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .schedule-controls {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+}

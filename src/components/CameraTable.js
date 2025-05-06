@@ -125,21 +125,23 @@ function CameraTable() {
   };
 
   const handleDeleteCamera = async (cameraId) => {
-    try {
-      const response = await fetch(`/camera/delete/${cameraId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
+    if(window.confirm("bạn muốn loại bỏ thiết bị?")){
+      try {
+        const response = await fetch(`${BACKEND_URL}/camera/delete/user?userId=${currentUserId}&cameraId=${cameraId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+  
+        if (response.ok) {
+          setCameras(prevCameras => prevCameras.filter(camera => camera.cameraId !== cameraId));
+        } else {
+          console.error('Error deleting camera');
         }
-      });
-
-      if (response.ok) {
-        setCameras(prevCameras => prevCameras.filter(camera => camera.cameraId !== cameraId));
-      } else {
-        console.error('Error deleting camera');
+      } catch (error) {
+        console.error('Network error:', error);
       }
-    } catch (error) {
-      console.error('Network error:', error);
     }
   };
 
