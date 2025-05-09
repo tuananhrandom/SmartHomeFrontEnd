@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import '../styles/DeviceActivityModal.css';
 import { BACKEND_URL } from '../config/api';
@@ -14,20 +14,13 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
     return date.toLocaleString('sv-SE').replace(' ', 'T');
   };
 
-  useEffect(() => {
-    if (isOpen && deviceType && deviceId) {
-      fetchActivities();
-    }
-  }, [isOpen, deviceType, deviceId, filterType]);
-
-  const fetchActivities = async () => {
+  const fetchActivities = useCallback(async () => {
     setIsLoading(true);
     try {
       let url = '';
       
       if (filterType === 'range') {
-        // Format ngày giờ đúng ISO để server Spring hiểu
-        const start = formatToLocalISOString(startTime); // "2025-04-20T13:21:00"
+        const start = formatToLocalISOString(startTime);
         const end = formatToLocalISOString(endTime);
   
         url = `${BACKEND_URL}/api/device-activities/time-range?deviceType=${deviceType}&deviceId=${deviceId}&startTime=${start}&endTime=${end}`;
@@ -45,7 +38,6 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
         const data = await response.json();
         let filteredData = data;
   
-        // Chỉ lọc khi không phải range
         if (filterType !== 'all' && filterType !== 'range') {
           filteredData = data.filter(activity => {
             if (filterType === 'on_off') {
@@ -70,7 +62,13 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [deviceType, deviceId, filterType, startTime, endTime]);
+
+  useEffect(() => {
+    if (isOpen && deviceType && deviceId) {
+      fetchActivities();
+    }
+  }, [isOpen, deviceType, deviceId, filterType, fetchActivities]);
 
   const getActivityTypeClass = (activityType) => {
     switch (activityType) {
@@ -149,12 +147,15 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
               >
                 Time Range
               </button>
-              <button 
-                className={`filter-button ${filterType === 'on_off' ? 'active' : ''}`}
-                onClick={() => setFilterType('on_off')}
-              >
-                Bật/Tắt
+              {deviceType === 'Light' && (
+                <button 
+                  className={`filter-button ${filterType === 'on_off' ? 'active' : ''}`}
+                  onClick={() => setFilterType('on_off')}
+                >
+                  Bật/Tắt
               </button>
+              )}
+
               {deviceType === 'Door' && (
                 <button 
                   className={`filter-button ${filterType === 'door' ? 'active' : ''}`}
@@ -163,14 +164,14 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
                   Mở/Đóng cửa
                 </button>
               )}
-              {deviceType === 'Camera' && (
+              {/* {deviceType === 'Camera' && (
                 <button 
                   className={`filter-button ${filterType === 'camera' ? 'active' : ''}`}
                   onClick={() => setFilterType('camera')}
                 >
                   Ghi hình
                 </button>
-              )}
+              )} */}
               <button 
                 className={`filter-button ${filterType === 'connection' ? 'active' : ''}`}
                 onClick={() => setFilterType('connection')}
@@ -205,7 +206,7 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
                   {activities.map((activity, index) => (
                     <div key={index} className={`activity-item ${getActivityTypeClass(activity.activityType)}`}>
                       <div className="cell image">
-                        <img src={getActivityIcon(activity.activityType)} alt='Image'/>
+                        <img src={getActivityIcon(activity.activityType)} alt={getActivityLabel(activity.activityType)}/>
                       </div>
                       <div className="activity-info">
                         <div className="activity-header">
