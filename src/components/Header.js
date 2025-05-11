@@ -41,7 +41,24 @@ function Header() {
     }
   }, [lastMessage]);
 
-  const toggleNotificationPopup = () => {
+  const toggleNotificationPopup = async () => {
+    if (!showNotifications) {
+      // Khi mở popup, gọi API đánh dấu tất cả thông báo đã đọc
+      try {
+        const response = await fetch(`${BACKEND_URL}/notification/mark-all-read/${currentUserId}`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+
+        if (response.ok) {
+          setHasNewNotifications(false);
+        }
+      } catch (error) {
+        console.error('Error marking notifications as read:', error);
+      }
+    }
     setShowNotifications(!showNotifications);
   };
   const handleUserDetail = () => {
@@ -100,6 +117,38 @@ function Header() {
     } catch (error) {
       throw new Error(error.message);
     }
+  };
+
+  // Thêm hàm kiểm tra thông báo chưa đọc
+  const checkUnreadNotifications = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/notification/unread/${currentUserId}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setHasNewNotifications(data.hasUnread);
+      }
+    } catch (error) {
+      console.error('Error checking unread notifications:', error);
+    }
+  };
+
+  // Kiểm tra thông báo chưa đọc khi component mount
+  useEffect(() => {
+    if (currentUserId) {
+      checkUnreadNotifications();
+    }
+  }, [currentUserId]);
+
+  // Thêm hàm xử lý khi đóng popup thông báo
+  const handleCloseNotifications = () => {
+    setShowNotifications(false);
+    // Cập nhật lại trạng thái thông báo chưa đọc
+    checkUnreadNotifications();
   };
 
   useEffect(() => {
@@ -163,7 +212,11 @@ function Header() {
 
 
       {showNotifications && (
-        <NotificationPopup ref={notificationRef} />
+        <NotificationPopup 
+          ref={notificationRef} 
+          onClose={handleCloseNotifications}
+          onMarkAsRead={() => setHasNewNotifications(false)}
+        />
       )}
     </header>
   );

@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 import { BACKEND_URL, BACKEND_URL_WS } from '../config/api';
 const NotificationPopup = forwardRef((props, ref) => {
+  const { onClose, onMarkAsRead } = props;
   const [notifications, setNotifications] = useState([]);
   const {currentUser}  = useAuth();
   const currentUserId = currentUser.userId;
@@ -43,14 +44,20 @@ const NotificationPopup = forwardRef((props, ref) => {
 
 
   useEffect(() => {
-    // Giả lập dữ liệu thông báo ban đầu
-    // Trong thực tế, bạn sẽ fetch dữ liệu từ API
     const fetchNotifications = async () => {
       try {
-        const response = await fetch(`${BACKEND_URL}/notification/${currentUserId}`);
+        const response = await fetch(`${BACKEND_URL}/notification/${currentUserId}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
         if (response.ok) {
           const data = await response.json();
           setNotifications(data);
+          // Nếu có thông báo, đánh dấu là đã đọc
+          // if (data.length > 0) {
+          //   onMarkAsRead();
+          // }
         }
       } catch (error) {
         console.error('Error fetching notifications:', error);
@@ -81,7 +88,7 @@ const NotificationPopup = forwardRef((props, ref) => {
     return () => {
       notificationEventSource.close();
     };
-  }, []);
+  }, [currentUserId]);
 
   const handleDeleteNotification = async (notificationId) => {
     try {
