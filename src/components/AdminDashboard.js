@@ -9,6 +9,7 @@ import { BACKEND_URL } from "../config/api";
 const AdminDashboard = () => {
   const [selectedDevice, setSelectedDevice] = useState("Light");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const deviceTypes = ["Light", "Door", "Camera"];
   const [devices, setDevices] = useState({
     lights: [],
@@ -72,6 +73,71 @@ const AdminDashboard = () => {
     setSelectedDevice(device);
   };
 
+  const handleSearch = async (query) => {
+    setSearchQuery(query);
+    if (!query) {
+      fetchAllDevices();
+      return;
+    }
+
+    try {
+      // Kiểm tra nếu query có dạng "1-10"
+      if (query.includes("-")) {
+        const [start, end] = query.split("-").map(Number);
+        if (isNaN(start) || isNaN(end)) {
+          console.error("Invalid range format");
+          return;
+        }
+        
+        // Fetch theo khoảng ID
+        const response = await fetch(`${BACKEND_URL}/${selectedDevice.toLowerCase()}/range/${start}/${end}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await response.json();
+        setDevices(prev => ({
+          ...prev,
+          [selectedDevice.toLowerCase() + 's']: data
+        }));
+      } else {
+        // Fetch theo ID cụ thể
+        const response = await fetch(`${BACKEND_URL}/${selectedDevice.toLowerCase()}/find/${Number(query)}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await response.json();
+        setDevices(prev => ({
+          ...prev,
+          [selectedDevice.toLowerCase() + 's']: [data]
+        }));
+      }
+    } catch (error) {
+      console.error("Error searching devices:", error);
+    }
+  };
+
+  const handleDeleteDevice = async (deviceType, deviceId) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/${deviceType}/admin/delete/${deviceId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (response.ok) {
+        // Cập nhật lại danh sách thiết bị sau khi xóa
+        fetchAllDevices();
+      } else {
+        console.error("Error deleting device");
+      }
+    } catch (error) {
+      console.error("Error deleting device:", error);
+    }
+  };
+
   const renderDeviceTable = () => {
     switch (selectedDevice) {
       case "Light":
@@ -90,7 +156,7 @@ const AdminDashboard = () => {
                   ID: {light.lightId}
                 </div>
                 <div className="cell ip">
-                  OwnerId: {light.ownerId != null && `: ${light.ownerId}`}
+                  OwnerId: {light.ownerId != null && `${light.ownerId}`}
                 </div>
                 <div id="light-status" className="cell status">
                   Status:
@@ -100,7 +166,7 @@ const AdminDashboard = () => {
                 <div id="light-delete" className="cell delete">
                   <button 
                     className="delete-button"
-                    //onClick={() => handleDeleteLight(light.lightId)}
+                    onClick={() => handleDeleteDevice('light', light.lightId)}
                   >
                     ✖
                   </button>
@@ -135,7 +201,7 @@ const AdminDashboard = () => {
                 <div id="door-delete" className="cell delete">
                   <button 
                     className="delete-button"
-                    //onClick={() => handleDeleteLight(light.lightId)}
+                    onClick={() => handleDeleteDevice('door', door.doorId)}
                   >
                     ✖
                   </button>
@@ -170,7 +236,7 @@ const AdminDashboard = () => {
                   <div id="camera-delete" className="cell delete">
                     <button 
                       className="delete-button"
-                      //onClick={() => handleDeleteLight(light.lightId)}
+                      onClick={() => handleDeleteDevice('camera', camera.cameraId)}
                     >
                       ✖
                     </button>
@@ -196,7 +262,12 @@ const AdminDashboard = () => {
               deviceTypes={deviceTypes}
             />
                       <div>
-                          <input className="finder" placeholder="ID"></input>
+                          <input 
+                            className="finder" 
+                            placeholder="ID (e.g. 1 or 1-10)"
+                            value={searchQuery}
+                            onChange={(e) => handleSearch(e.target.value)}
+                          />
                       </div>          
             <div>
               <button className="add-button" onClick={handleAddDevice}>Add</button>
