@@ -1,7 +1,8 @@
 import React, { useState, useEffect, forwardRef } from 'react';
 import useWebSocket from '../hooks/useWebSocket';
 import { useAuth } from '../contexts/AuthContext';
-import { BACKEND_URL } from '../config/api';
+
+import { BACKEND_URL, BACKEND_URL_WS } from '../config/api';
 const NotificationPopup = forwardRef((props, ref) => {
   const [notifications, setNotifications] = useState([]);
   const {currentUser}  = useAuth();
@@ -59,7 +60,7 @@ const NotificationPopup = forwardRef((props, ref) => {
     fetchNotifications();
 
     // Thiết lập EventSource để nhận thông báo mới
-    const notificationEventSource = new EventSource('/notification/stream');
+    const notificationEventSource = new EventSource(`${BACKEND_URL_WS}/notification/stream`);
     
     notificationEventSource.addEventListener('notification-update', (event) => {
       const notification = JSON.parse(event.data);
@@ -147,9 +148,9 @@ const NotificationPopup = forwardRef((props, ref) => {
                 className="notification-image" 
                 src={(() => {
                   const typeImageMap = {
-                    'Light': '/light.png',
-                    'Door': '/door.png',
-                    'Camera': '/camera.png'
+                    'LIGHT': '/light.png',
+                    'DOOR': '/door.png',
+                    'CAMERA': '/camera.png'
                   };
                   
                   return typeImageMap[notification.notificationType] || notification.notificationImage || '/light.png';
