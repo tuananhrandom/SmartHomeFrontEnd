@@ -8,7 +8,7 @@ body {
 
 .container {
     width: 95%;
-    margin: 0 auto;
+    margin: 50px auto;
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -92,12 +92,20 @@ animation-iteration-count: 2;
 .notification {
     position: relative;
     cursor: pointer;
+    align-items: center;
+    
 
 }
 
 .bell::before {
-    content: '🔔';
+    /* content: '🔔'; */
     font-size: 24px;
+}
+.notification img{
+    width: 40px;
+    height: 40px;
+    border-radius: 30px;
+    margin-top:40%;
 }
 
 .dot {

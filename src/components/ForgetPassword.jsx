@@ -26,7 +26,7 @@ const ForgetPassword = () => {
       // Đảm bảo xóa token trước khi gửi yêu cầu quên mật khẩu
       localStorage.removeItem('token');
       
-      const response = await fetch(`${BACKEND_URL}/api/auth/forget?email=${email}`, {
+      const response = await fetch(`${BACKEND_URL}/auth/forget?email=${email}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

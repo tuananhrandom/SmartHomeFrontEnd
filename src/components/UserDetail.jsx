@@ -24,7 +24,7 @@ function UserDetail({ isOpen, onClose, onEditInfo, onChangePassword }) {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`${BACKEND_URL}/api/auth/me`, {
+        const response = await fetch(`${BACKEND_URL}/auth/me`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }

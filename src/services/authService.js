@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { BACKEND_URL } from '../config/api';
-const API_URL = `${BACKEND_URL}/api/auth/`;
+const API_URL = `${BACKEND_URL}/auth/`;
 
 
 //tạo axios với cấu hình mặc định
@@ -26,7 +26,7 @@ api.interceptors.request.use(
 // đăng ký tài khoản
 export const register = async (username, password, email, fullName) => {
     try {
-      const response = await api.post(`${BACKEND_URL}/api/auth/register`, {
+      const response = await api.post(`${BACKEND_URL}/auth/register`, {
         username,
         password,
         email,
@@ -44,7 +44,7 @@ export const register = async (username, password, email, fullName) => {
 // đăng nhập tài khoản
 export const login = async (username, password) => {
     try {
-      const response = await api.post(`${BACKEND_URL}/api/auth/login`, {
+      const response = await api.post(`${BACKEND_URL}/auth/login`, {
         username,
         password,
       });
@@ -65,7 +65,7 @@ export const logout = () => {
 // lấy thông tin người dùng hiện tại
 export const getCurrentUser = async () => {
     try {
-      const response = await api.get('/me');
+      const response = await api.get(`${BACKEND_URL}/auth/me`);
       return response.data;
     } catch (error) {
       throw error.response?.data || { message: 'Đã xảy ra lỗi khi lấy thông tin người dùng' };

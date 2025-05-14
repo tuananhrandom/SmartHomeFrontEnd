@@ -23,9 +23,9 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
         const start = formatToLocalISOString(startTime);
         const end = formatToLocalISOString(endTime);
   
-        url = `${BACKEND_URL}/api/device-activities/time-range?deviceType=${deviceType}&deviceId=${deviceId}&startTime=${start}&endTime=${end}`;
+        url = `${BACKEND_URL}/device-activities/time-range?deviceType=${deviceType}&deviceId=${deviceId}&startTime=${start}&endTime=${end}`;
       } else {
-        url = `${BACKEND_URL}/api/device-activities/device?deviceType=${deviceType}&deviceId=${deviceId}`;
+        url = `${BACKEND_URL}/device-activities/device?deviceType=${deviceType}&deviceId=${deviceId}`;
       }
   
       const response = await fetch(url, {

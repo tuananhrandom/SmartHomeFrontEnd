@@ -30,7 +30,7 @@ function EditUserInfo({ isOpen, onClose, onSave }) {
     try {
       // Gọi API cập nhật thông tin tài khoản
       console.log('Đang gửi yêu cầu cập nhật với dữ liệu:', formData);
-      const response = await axios.put(`${BACKEND_URL}/api/auth/profile`, formData, {
+      const response = await axios.put(`${BACKEND_URL}/auth/profile`, formData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`

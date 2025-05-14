@@ -6,8 +6,8 @@ import useWebSocket from '../hooks/useWebSocket';
 import EditUserInfo from './EditUserInfo';
 import ChangePassword from './ChangePassword';
 import { BACKEND_URL } from '../config/api';
+
 function Header() {
-  
   const [showNotifications, setShowNotifications] = useState(false);
   const notificationRef = useRef(null);
   const bellRef = useRef(null);
@@ -18,12 +18,14 @@ function Header() {
   const [showChangePassword, setShowChangePassword] = useState(false);
   const { currentUser } = useAuth();
   const currentUserId = currentUser?.userId;
+
   // xử lý khi có thông báo mới
   // Lắng nghe sự kiện thông báo mới từ WebSocket
   const { lastMessage } = useWebSocket({
-  autoConnect: true,
-  events: ['notification-update']
-});
+    autoConnect: true,
+    events: ['notification-update']
+  });
+
   // Khi có thông báo mới, đặt hasNewNotifications = true và kích hoạt hiệu ứng lắc
   useEffect(() => {
     if (lastMessage && lastMessage.type === 'notification-update') {
@@ -61,6 +63,7 @@ function Header() {
     }
     setShowNotifications(!showNotifications);
   };
+
   const handleUserDetail = () => {
     setShowUserDetail(true);
   };
@@ -78,7 +81,7 @@ function Header() {
   const handleUpdateUserInfo = async (formData) => {
     try {
       // Gọi API cập nhật thông tin người dùng
-      const response = await fetch(`${BACKEND_URL}/api/auth/profile`, {
+      const response = await fetch(`${BACKEND_URL}/auth/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -102,7 +105,7 @@ function Header() {
   const handlePasswordChange = async (formData) => {
     try {
       // Gọi API đổi mật khẩu
-      const response = await fetch(`${BACKEND_URL}/api/auth/change-password`, {
+      const response = await fetch(`${BACKEND_URL}/auth/change-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -176,13 +179,10 @@ function Header() {
       </div>
       <div className="header-right">
         <div className="user-info">
-          {/* <span className="username">{currentUser?.username}</span> */}
           <img className="user" src="user-profile.png" alt="User Profile" onClick={handleUserDetail} />
-          {/* <button className="logout-button" onClick={handleLogout}>
-            Đăng xuất
-          </button> */}
         </div>
         <div className="notification" ref={bellRef} onClick={toggleNotificationPopup}>
+          <img src='bell.png' alt='Bell'/>
           <span className={`bell ${isShaking ? 'shake' : ''}`}></span>
           {hasNewNotifications && <span className="dot"></span>}
         </div>
@@ -200,7 +200,6 @@ function Header() {
       <EditUserInfo 
         isOpen={showEditInfo}
         onClose={() => setShowEditInfo(false)}
-        // onSave={handleUpdateUserInfo}
       />
 
       {/* Modal ChangePassword */}
@@ -209,7 +208,6 @@ function Header() {
         onClose={() => setShowChangePassword(false)}
         onChangePassword={handlePasswordChange}
       />
-
 
       {showNotifications && (
         <NotificationPopup 

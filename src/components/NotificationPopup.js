@@ -4,7 +4,6 @@ import { useAuth } from '../contexts/AuthContext';
 
 import { BACKEND_URL, BACKEND_URL_WS } from '../config/api';
 const NotificationPopup = forwardRef((props, ref) => {
-  const { onClose, onMarkAsRead } = props;
   const [notifications, setNotifications] = useState([]);
   const {currentUser}  = useAuth();
   const currentUserId = currentUser.userId;
@@ -44,20 +43,14 @@ const NotificationPopup = forwardRef((props, ref) => {
 
 
   useEffect(() => {
+    // Giả lập dữ liệu thông báo ban đầu
+    // Trong thực tế, bạn sẽ fetch dữ liệu từ API
     const fetchNotifications = async () => {
       try {
-        const response = await fetch(`${BACKEND_URL}/notification/${currentUserId}`, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
+        const response = await fetch(`${BACKEND_URL}/notification/${currentUserId}`);
         if (response.ok) {
           const data = await response.json();
           setNotifications(data);
-          // Nếu có thông báo, đánh dấu là đã đọc
-          // if (data.length > 0) {
-          //   onMarkAsRead();
-          // }
         }
       } catch (error) {
         console.error('Error fetching notifications:', error);
@@ -67,32 +60,32 @@ const NotificationPopup = forwardRef((props, ref) => {
     fetchNotifications();
 
     // Thiết lập EventSource để nhận thông báo mới
-    const notificationEventSource = new EventSource(`${BACKEND_URL_WS}/notification/stream`);
+    // const notificationEventSource = new EventSource(`${BACKEND_URL_WS}/notification/stream`);
     
-    notificationEventSource.addEventListener('notification-update', (event) => {
-      const notification = JSON.parse(event.data);
-      setNotifications(prev => [notification, ...prev]);
-    });
+    // notificationEventSource.addEventListener('notification-update', (event) => {
+    //   const notification = JSON.parse(event.data);
+    //   setNotifications(prev => [notification, ...prev]);
+    // });
 
-    notificationEventSource.addEventListener('notification-delete', (event) => {
-      const deleteNotification = JSON.parse(event.data);
-      setNotifications(prev => 
-        prev.filter(notification => notification.notificationId !== deleteNotification.notificationId)
-      );
-    });
+    // notificationEventSource.addEventListener('notification-delete', (event) => {
+    //   const deleteNotification = JSON.parse(event.data);
+    //   setNotifications(prev => 
+    //     prev.filter(notification => notification.notificationId !== deleteNotification.notificationId)
+    //   );
+    // });
 
-    notificationEventSource.addEventListener('notification-delete-all', () => {
-      setNotifications([]);
-    });
+    // notificationEventSource.addEventListener('notification-delete-all', () => {
+    //   setNotifications([]);
+    // });
 
-    return () => {
-      notificationEventSource.close();
-    };
-  }, [currentUserId]);
+    // return () => {
+    //   notificationEventSource.close();
+    // };
+  }, []);
 
   const handleDeleteNotification = async (notificationId) => {
     try {
-      const response = await fetch(`/notification/delete/${notificationId}`, {
+      const response = await fetch(`${BACKEND_URL}/notification/delete/${notificationId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
@@ -114,7 +107,7 @@ const NotificationPopup = forwardRef((props, ref) => {
   const handleDeleteAllNotifications = async () => {
     if (window.confirm("Are you sure?")) {
       try {
-        const response = await fetch(`/notification/delete/all`, {
+        const response = await fetch(`${BACKEND_URL}/notification/delete/all/${currentUserId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json'
