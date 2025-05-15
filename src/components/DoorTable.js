@@ -225,7 +225,7 @@ function DoorTable() {
                 Alert:
                 {door.doorLockDown === 0 && <span className="status-off">OFF</span>}
                 {door.doorLockDown === 1 && <span className="status-on">ON</span>}
-                {door.doorLockDown === null && <span className="status-on">Null</span>}
+                {door.doorLockDown === null && <span className="status-on">Undetect</span>}
               </div>
   
               <div id="door-action" className="cell action">

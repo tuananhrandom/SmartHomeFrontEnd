@@ -18,6 +18,18 @@ function Header() {
   const [showChangePassword, setShowChangePassword] = useState(false);
   const { currentUser } = useAuth();
   const currentUserId = currentUser?.userId;
+  console.log(currentUser);
+
+  // Thêm useEffect để kiểm tra và rung chuông khi có thông báo mới
+  useEffect(() => {
+    if (hasNewNotifications) {
+      setIsShaking(true);
+      const timer = setTimeout(() => {
+        setIsShaking(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [hasNewNotifications]);
 
   // xử lý khi có thông báo mới
   // Lắng nghe sự kiện thông báo mới từ WebSocket
@@ -26,20 +38,10 @@ function Header() {
     events: ['notification-update']
   });
 
-  // Khi có thông báo mới, đặt hasNewNotifications = true và kích hoạt hiệu ứng lắc
+  // Khi có thông báo mới, đặt hasNewNotifications = true
   useEffect(() => {
     if (lastMessage && lastMessage.type === 'notification-update') {
       setHasNewNotifications(true);
-      
-      // Kích hoạt hiệu ứng lắc
-      setIsShaking(true);
-      
-      // Ngừng hiệu ứng lắc sau 2 giây
-      const timer = setTimeout(() => {
-        setIsShaking(false);
-      }, 2000);
-      
-      return () => clearTimeout(timer);
     }
   }, [lastMessage]);
 
@@ -175,15 +177,14 @@ function Header() {
   return (
     <header className="header">
       <div className="header-left">
-        <h1>My Smart Home</h1>
+        <h1>Chào Mừng, {currentUser.username}! 🥰</h1>
       </div>
       <div className="header-right">
         <div className="user-info">
           <img className="user" src="user-profile.png" alt="User Profile" onClick={handleUserDetail} />
         </div>
         <div className="notification" ref={bellRef} onClick={toggleNotificationPopup}>
-          <img src='bell.png' alt='Bell'/>
-          <span className={`bell ${isShaking ? 'shake' : ''}`}></span>
+          <img src='bell.png' alt='Bell' className={isShaking ? 'shake' : ''}/>
           {hasNewNotifications && <span className="dot"></span>}
         </div>
       </div>
