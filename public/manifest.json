@@ -1,6 +1,6 @@
 {
   "short_name": "Smart Home",
-  "name": "Smart Home Control System",
+  "name": "Smart Home Application",
   "icons": [
     {
       "src": "WebLogo.ico",
@@ -8,22 +8,21 @@
       "type": "image/x-icon"
     },
     {
-      "src": "WebLogo-192.png",
+      "src": "logo192.png",
       "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "any maskable"
+      "sizes": "192x192"
     },
     {
-      "src": "WebLogo-512.png",
+      "src": "logo512.png",
       "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "any maskable"
+      "sizes": "512x512"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#2196f3",
+  "theme_color": "#B2D1D6",
   "background_color": "#ffffff",
+  "permissions": ["notifications"],
   "orientation": "portrait",
   "description": "Ứng dụng điều khiển nhà thông minh",
   "categories": ["utilities", "lifestyle"],

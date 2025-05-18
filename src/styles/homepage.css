@@ -669,3 +669,30 @@ display: block;
       padding: 6px 10px;
     }
   }
+
+.push-toggle {
+    font-family: Krub;
+    background-color: #B2D1D6;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #2c3e50;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+}
+
+.push-toggle:hover {
+    background-color: #8da8ac;
+    transform: translateY(-2px);
+}
+
+.push-toggle.enabled {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.push-toggle.enabled:hover {
+    background-color: #45a049;
+}

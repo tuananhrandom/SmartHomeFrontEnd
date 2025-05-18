@@ -6,6 +6,7 @@ import useWebSocket from '../hooks/useWebSocket';
 import EditUserInfo from './EditUserInfo';
 import ChangePassword from './ChangePassword';
 import { BACKEND_URL } from '../config/api';
+import { registerPushNotification, unregisterPushNotification } from '../services/pushNotificationService';
 
 function Header() {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -20,6 +21,10 @@ function Header() {
   const currentUserId = currentUser?.userId;
   console.log(currentUser);
 
+  // Thêm state để theo dõi trạng thái đăng ký thông báo
+  const [isPushEnabled, setIsPushEnabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   // Thêm useEffect để kiểm tra và rung chuông khi có thông báo mới
   useEffect(() => {
     if (hasNewNotifications) {
@@ -31,8 +36,61 @@ function Header() {
     }
   }, [hasNewNotifications]);
 
+  // Tự động đăng ký thông báo khi component mount
+  useEffect(() => {
+    const autoRegisterPush = async () => {
+      try {
+        console.log('Bắt đầu kiểm tra đăng ký thông báo...');
+        
+        // Kiểm tra xem service worker có được hỗ trợ không
+        if (!('serviceWorker' in navigator)) {
+          console.error('Service Worker không được hỗ trợ');
+          return;
+        }
+
+        if (!('PushManager' in window)) {
+          console.error('Push API không được hỗ trợ');
+          return;
+        }
+
+        // Kiểm tra quyền thông báo
+        const permission = await Notification.permission;
+        console.log('Trạng thái quyền thông báo:', permission);
+
+        if (permission === 'denied') {
+          console.error('Quyền thông báo bị từ chối');
+          return;
+        }
+
+        // Đăng ký service worker
+        const registration = await navigator.serviceWorker.register('/sw.js');
+        console.log('Service Worker đã đăng ký:', registration);
+
+        // Kiểm tra subscription hiện tại
+        const subscription = await registration.pushManager.getSubscription();
+        console.log('Subscription hiện tại:', subscription);
+        
+        // Nếu chưa đăng ký, thực hiện đăng ký
+        if (!subscription) {
+          console.log('Bắt đầu đăng ký thông báo tự động...');
+          await registerPushNotification();
+          console.log('Đăng ký thông báo thành công');
+        } else {
+          console.log('Đã có subscription, không cần đăng ký lại');
+        }
+      } catch (error) {
+        console.error('Lỗi khi đăng ký thông báo tự động:', error);
+      }
+    };
+
+    // Chỉ thực hiện khi đã đăng nhập
+    if (currentUser) {
+      console.log('Người dùng đã đăng nhập, bắt đầu kiểm tra đăng ký thông báo');
+      autoRegisterPush();
+    }
+  }, [currentUser]);
+
   // xử lý khi có thông báo mới
-  // Lắng nghe sự kiện thông báo mới từ WebSocket
   const { lastMessage } = useWebSocket({
     autoConnect: true,
     events: ['notification-update']
@@ -174,6 +232,48 @@ function Header() {
     };
   }, []);
 
+  // Kiểm tra trạng thái subscription khi component mount
+  useEffect(() => {
+    const checkPushSubscription = async () => {
+      try {
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.getSubscription();
+        setIsPushEnabled(!!subscription);
+      } catch (error) {
+        console.error('Error checking push subscription:', error);
+        setIsPushEnabled(false);
+      }
+    };
+
+    checkPushSubscription();
+  }, []);
+
+  // Hàm xử lý đăng ký/hủy đăng ký thông báo
+  const handlePushToggle = async () => {
+    try {
+      setIsLoading(true);
+      if (isPushEnabled) {
+        await unregisterPushNotification();
+        setIsPushEnabled(false);
+      } else {
+        const subscription = await registerPushNotification();
+        if (subscription) {
+          setIsPushEnabled(true);
+        } else {
+          setIsPushEnabled(false);
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling push notification:', error);
+      // Kiểm tra lại trạng thái thực tế của subscription
+      const registration = await navigator.serviceWorker.ready;
+      const subscription = await registration.pushManager.getSubscription();
+      setIsPushEnabled(!!subscription);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <header className="header">
       <div className="header-left">
@@ -187,6 +287,13 @@ function Header() {
           <img src='bell.png' alt='Bell' className={isShaking ? 'shake' : ''}/>
           {hasNewNotifications && <span className="dot"></span>}
         </div>
+        {/* <button 
+          className={`push-toggle ${isPushEnabled ? 'enabled' : ''}`}
+          onClick={handlePushToggle}
+          disabled={isLoading}
+        >
+          {isLoading ? 'Đang xử lý...' : (isPushEnabled ? 'Tắt thông báo' : 'Bật thông báo')}
+        </button> */}
       </div>
 
       {/* Modal UserDetail */}
