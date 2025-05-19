@@ -311,6 +311,14 @@ display: block;
     color: #006e63;
     transform: 1.2;
 }
+.action-button{
+    background-color: #B2D1D6;
+    display: flex;
+    width: 35px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+}
 
 .action-button, .delete-button {
     background-color: #B2D1D6;
@@ -318,7 +326,7 @@ display: block;
     padding: 5px 10px;
     border-radius: 20px;
     cursor: pointer;
-    min-width: 30px;
+    /* min-width: 30px; */
 }
 
 .warning {
@@ -553,6 +561,10 @@ display: block;
   transition: all 0.5s;
   z-index: -100;
   flex-wrap: nowrap; /* Thêm */
+}
+
+.action-button img{
+    width: 20px;
 }
 
 /* Thêm style mới cho điện thoại */

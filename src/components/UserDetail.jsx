@@ -95,7 +95,8 @@ function UserDetail({ isOpen, onClose, onEditInfo, onChangePassword }) {
               <span>{userData.role}</span>
             </div> */}
           </div>
-          <div className="user-stats">
+          {currentUser.role === 'USER' && (
+            <div className="user-stats">
             <h3>Thống kê</h3>
             <div className="stats-grid">
               <div className="stat-item">
@@ -116,6 +117,7 @@ function UserDetail({ isOpen, onClose, onEditInfo, onChangePassword }) {
               </div>
             </div>
           </div>
+          )}
         </div>
         <div className="modal-footer">
           <button className="edit-button" onClick={onEditInfo}>

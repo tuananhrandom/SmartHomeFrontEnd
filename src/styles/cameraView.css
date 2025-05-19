@@ -111,6 +111,18 @@
 .retry-button:hover {
   background-color: #1976d2;
 }
+.isRecording{
+  position: absolute;
+  z-index: 1008;
+  width: 20px;
+  height: 20px;
+  top: 5%;
+  left:5%
+}
+.isRecording img{
+  position: absolute;
+  width: 50px;
+}
 
 /* Phần CSS cho điều khiển camera */
 .camera-controls {

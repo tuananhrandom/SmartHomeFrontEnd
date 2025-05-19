@@ -211,7 +211,7 @@ function DoorTable() {
                 )}
               </div>
   
-              <div id="door-id" className="cell">ID: {door.doorId}</div>
+              <div id="door-id" className="cell id">ID: {door.doorId}</div>
               <div id="door-ip" className="cell ip">IP: {door.doorIp}</div>
   
               <div id="door-status" className="cell status">
@@ -235,7 +235,7 @@ function DoorTable() {
                     className="action-button turn-off"
                     onClick={() => handleToggleAlert(door)}
                   >
-                    Alert Off
+                    Off
                   </button>
                 )}
                 {door.doorLockDown === 0 && (
@@ -244,7 +244,7 @@ function DoorTable() {
                     className="action-button turn-on"
                     onClick={() => handleToggleAlert(door)}
                   >
-                    Alert On
+                    On
                   </button>
                 )}
                 {(door.doorLockDown === null || door.doorStatus === null) && (

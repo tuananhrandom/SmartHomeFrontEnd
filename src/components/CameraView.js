@@ -3,12 +3,13 @@ import '../styles/cameraView.css';
 import { useAuth } from '../contexts/AuthContext';
 import { BACKEND_URL_WS } from '../config/api';
 
-const CameraView = ({selectedCameraId ,isOpen, OnClose }) => {
+const CameraView = ({selectedCameraId ,isOpen, OnClose, isRecording }) => {
   const { currentUser } = useAuth();
   const currentUserId = currentUser.userId;
   const [isConnected, setIsConnected] = useState(false);
   const [rotationStatus, setRotationStatus] = useState(null);
   const [isRotating, setIsRotating] = useState(false);
+
 
   const [error, setError] = useState(null);
   const videoRef = useRef(null);
@@ -201,6 +202,11 @@ const CameraView = ({selectedCameraId ,isOpen, OnClose }) => {
               alt="Camera feed"
               style={{ display: isConnected ? 'block' : 'none' }}
             /> */}
+            {isRecording && (
+              <span className="isRecording">
+                <img src='isRecording.png' alt='Recording'/>
+              </span>
+            )}
             <img
               ref={videoRef}
               className="camera-feed"

@@ -283,10 +283,13 @@ function Header() {
         <div className="user-info">
           <img className="user" src="user-profile.png" alt="User Profile" onClick={handleUserDetail} />
         </div>
-        <div className="notification" ref={bellRef} onClick={toggleNotificationPopup}>
-          <img src='bell.png' alt='Bell' className={isShaking ? 'shake' : ''}/>
-          {hasNewNotifications && <span className="dot"></span>}
-        </div>
+        {currentUser.role === 'USER' && (
+                  <div className="notification" ref={bellRef} onClick={toggleNotificationPopup}>
+                  <img src='bell.png' alt='Bell' className={isShaking ? 'shake' : ''}/>
+                  {hasNewNotifications && <span className="dot"></span>}
+                </div>
+        )}
+
         {/* <button 
           className={`push-toggle ${isPushEnabled ? 'enabled' : ''}`}
           onClick={handlePushToggle}

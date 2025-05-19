@@ -179,7 +179,7 @@ function LightTable() {
                   <button className="cell edit" onClick={() => handleEditPopup(light.lightId)}>✍🏻</button>
                 )}
               </div>
-              <div id="light-id" className="cell">ID: {light.lightId}</div>
+              <div id="light-id" className="cell id">ID: {light.lightId}</div>
               <div id="light-ip" className="cell ip">IP: {light.lightIp}</div>
               <div id="light-status" className="cell status">
                 Status:
@@ -190,12 +190,12 @@ function LightTable() {
               <div id="light-action" className="cell action">
                 {light.lightStatus === 1 && (
                   <button className="action-button turn-off" onClick={() => handleToggleLight(light)}>
-                    turn off
+                    OFF
                   </button>
                 )}
                 {light.lightStatus === 0 && (
                   <button className="action-button turn-on" onClick={() => handleToggleLight(light)}>
-                    turn on
+                    ON
                   </button>
                 )}
                 {light.lightStatus === null && (

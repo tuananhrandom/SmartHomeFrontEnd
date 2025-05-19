@@ -21,6 +21,7 @@ button, input, select, textarea {
 }
 
 /* Mobile styles (< 480px) */
+/* Mobile styles (< 480px) */
 @media (max-width: 480px) {
   body {
     font-size: 14px;
@@ -36,41 +37,49 @@ button, input, select, textarea {
   .header {
     flex-direction: column;
     padding: 10px;
+    align-items: flex-end;
+    justify-content: flex-end;
   }
   
   .header h1 {
     font-size: 22px;
     margin-bottom: 10px;
+    display: none;
   }
   
   .header-right {
-    width: 100%;
-    justify-content: space-around;
+    width: 20%;
     gap: 10px;
+
   }
   
   /* Toolbar styles */
   .toolbar {
-    flex-direction: column;
+    flex-direction: row;
     gap: 10px;
-    align-items: stretch;
+    align-items: center;
+    width: 100%;
+    /* align-items: stretch; */
   }
+
   
   .dropdown-button, .add-button {
-    width: 100%;
+    width: 70%;
     margin: 5px 0;
+    min-width: 100px;
   }
   
   /* Table styles */
   .row {
     flex-wrap: wrap;
-    padding: 10px 5px;
-    gap: 5px;
+    /* padding: 10px 5px;
+    gap: 5px; */
   }
   
   .cell {
     padding: 3px;
     font-size: 12px;
+    min-width: auto;
   }
   
   .cell.image {
@@ -90,19 +99,40 @@ button, input, select, textarea {
   .cell.id, .cell.ip, .cell.status, .cell.lockdown {
     width: 48%;
     font-size: 12px;
+    display: none;
   }
-  
-  .cell.action, .cell.delete {
+  /* .cell.action {
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 8px;
     width: 100%;
-    justify-content: space-between;
-    margin-top: 5px;
+  } */
+  .cell.action {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
   }
   
-  .action-button, .delete-button, .schedule-button, .turn-on, .turn-off, .refresh {
+  .cell.delete {
+    justify-content: flex-end;
+    max-width: fit-content;
+
+    /* margin-top: 5px; */
+  }
+  .action-button{
+  
+    /* flex: 1 1 48%;
+    min-width: 100px;
+    margin: 2px 0;
+      text-align: center; */
+  }
+  
+  .delete-button, .schedule-button, .turn-on, .turn-off, .refresh {
     font-size: 12px;
     padding: 5px 8px;
     white-space: nowrap;
-    margin: 2px;
+    /* margin: 2px; */
   }
   
   /* Căn chỉnh container chứa nút */
@@ -203,7 +233,51 @@ button, input, select, textarea {
   .activity-list {
     max-height: 200px;
   }
+
+  .modal-content {
+    width: 96vw !important;
+    min-width: unset !important;
+    max-width: 98vw !important;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) !important;
+    border-radius: 12px;
+    padding: 8px 4px;
+    position: fixed;
+  }
+  .modal-header, .modal-footer {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 8px;
+    text-align: center;
+  }
+  .modal-header h2 {
+    font-size: 18px;
+  }
+  .modal-body {
+    padding: 10px 4px;
+  }
+  .user-info-inside {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .stat-item {
+    font-size: 14px;
+    padding: 6px 0;
+  }
+  .edit-button, .change-password-button, .logout-button {
+    width: 100%;
+    margin: 6px 0;
+    font-size: 15px;
+    padding: 10px 0;
+    border-radius: 8px;
+  }
 }
+
 
 /* Tablet styles (481px - 768px) */
 @media (min-width: 481px) and (max-width: 768px) {
@@ -215,20 +289,19 @@ button, input, select, textarea {
     flex-wrap: wrap;
   }
   
-  .row {
-    flex-wrap: wrap;
-  }
+
   
   .cell.name {
     width: 60%;
   }
   
   .cell.id, .cell.ip {
-    width: 48%;
+    /* width: 48%; */
+    display: none;
   }
   
   .cell.status, .cell.lockdown {
-    width: 48%;
+    /* width: 48%; */
   }
   
   .cell.action, .cell.delete {

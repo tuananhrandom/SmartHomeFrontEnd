@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/CameraRecordingsModal.css';
 import { BACKEND_URL } from '../config/api';
-function CameraRecordingsModal({ isOpen, onClose, cameraId }) {
+function CameraRecordingsModal({ isOpen, onClose, cameraId, isRecording }) {
   const [recordings, setRecordings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
