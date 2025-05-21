@@ -3,7 +3,7 @@ import '../styles/cameraView.css';
 import { useAuth } from '../contexts/AuthContext';
 import { BACKEND_URL_WS } from '../config/api';
 
-const CameraView = ({selectedCameraId ,isOpen, OnClose, isRecording }) => {
+const CameraView = ({selectedCameraId ,isOpen, OnClose, isRecording, isShared }) => {
   const { currentUser } = useAuth();
   const currentUserId = currentUser.userId;
   const [isConnected, setIsConnected] = useState(false);
@@ -224,7 +224,7 @@ const CameraView = ({selectedCameraId ,isOpen, OnClose, isRecording }) => {
         )}
 
         {/* Bảng điều khiển camera */}
-        {isConnected && (
+        {!isShared && (
           <div className="camera-controls">
             <div className="control-header">
               <h3>Điều khiển camera</h3>

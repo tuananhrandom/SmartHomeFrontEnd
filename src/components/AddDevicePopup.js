@@ -1,20 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { BACKEND_URL } from '../config/api';
+import QRScanner from './QRScanner';
+
 function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDeviceType }) {
   const [deviceType, setDeviceType] = useState(currentDeviceType || deviceTypes[0] || 'Light');
   const [deviceId, setDeviceId] = useState('');
   const [deviceName, setDeviceName] = useState('');
+  const [showScanner, setShowScanner] = useState(false);
   const { currentUser } = useAuth();
   const currentUserId = currentUser.userId;
   const userRole = currentUser.role;
 
   // Reset deviceType khi currentDeviceType thay đổi
-  React.useEffect(() => {
+  useEffect(() => {
     if (currentDeviceType) {
       setDeviceType(currentDeviceType);
     }
   }, [currentDeviceType]);
+
+  const handleQRResult = (result) => {
+    setDeviceId(result);
+    setShowScanner(false);
+  };
 
   const handleSubmit = async () => {
     if (userRole !== 'ADMIN') {
@@ -110,6 +118,12 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDevi
         <div className={`popup-content ${isOpen ? 'popup-show' : ''}`}>
           <div className="popup-header">
             <h2>New Device</h2>
+            <button 
+              className="scan-qr-button"
+              onClick={() => setShowScanner(true)}
+            >
+              <img src='qr.png' alt='QR'/>
+            </button>
             <select 
               id="deviceType" 
               className="dropdown-button"
@@ -124,16 +138,24 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDevi
             </select>
           </div>
           <div className="popup-body">
-            <input 
-              type="text" 
-              id="deviceId" 
-              placeholder="Device ID"
-              value={deviceId}
-              onChange={(e) => setDeviceId(e.target.value)}
-            />
-            {userRole !== 'ADMIN' && <input type="text" id="deviceName" placeholder="Device Name"value={deviceName}onChange={(e) => setDeviceName(e.target.value)}
-            />}
-
+            <div className="device-id-input">
+              <input 
+                type="text" 
+                id="deviceId" 
+                placeholder="Device ID"
+                value={deviceId}
+                onChange={(e) => setDeviceId(e.target.value)}
+              />
+            </div>
+            {userRole !== 'ADMIN' && (
+              <input 
+                type="text" 
+                id="deviceName" 
+                placeholder="Device Name"
+                value={deviceName}
+                onChange={(e) => setDeviceName(e.target.value)}
+              />
+            )}
           </div>
           <div className="popup-footer">
             <button id="cancelButton" onClick={onClose}>Cancel</button>
@@ -141,6 +163,12 @@ function AddDevicePopup({ isOpen, onClose, deviceTypes, onAddDevice, currentDevi
           </div>
         </div>
       </div>
+      {showScanner && (
+        <QRScanner 
+          onResult={handleQRResult}
+          onClose={() => setShowScanner(false)}
+        />
+      )}
     </>
   );
 }

@@ -21,7 +21,6 @@ button, input, select, textarea {
 }
 
 /* Mobile styles (< 480px) */
-/* Mobile styles (< 480px) */
 @media (max-width: 480px) {
   body {
     font-size: 14px;
@@ -50,7 +49,6 @@ button, input, select, textarea {
   .header-right {
     width: 20%;
     gap: 10px;
-
   }
   
   /* Toolbar styles */
@@ -59,12 +57,10 @@ button, input, select, textarea {
     gap: 10px;
     align-items: center;
     width: 100%;
-    /* align-items: stretch; */
   }
-
   
   .dropdown-button, .add-button {
-    width: 70%;
+    width: 48%;
     margin: 5px 0;
     min-width: 100px;
   }
@@ -72,8 +68,8 @@ button, input, select, textarea {
   /* Table styles */
   .row {
     flex-wrap: wrap;
-    /* padding: 10px 5px;
-    gap: 5px; */
+    padding: 8px 5px;
+    gap: 5px;
   }
   
   .cell {
@@ -275,6 +271,15 @@ button, input, select, textarea {
     font-size: 15px;
     padding: 10px 0;
     border-radius: 8px;
+  }
+  .scan-qr-button{
+    visibility: visible;
+  }
+  .popup-share-input-group input {
+    width: 100%;
+  }
+  .device-list{
+    max-height: 520px;
   }
 }
 

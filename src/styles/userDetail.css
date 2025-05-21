@@ -196,6 +196,26 @@
   background-color: #a35050
 }
 
+.remove-user-button {
+  background-color: #ff5252;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.remove-user-button:hover {
+  background-color: #d14141;
+  transform: translateY(-2px);
+}
+
+.remove-user-button:active {
+  transform: translateY(0);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .modal-content {

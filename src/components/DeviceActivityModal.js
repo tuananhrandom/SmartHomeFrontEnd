@@ -81,8 +81,8 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
       case 'ALARM_ON': return 'activity-alarm-on';
       case 'ALARM_OFF': return 'activity-alarm-off';
       case 'WARNING': return 'activity-warning'
-      case 'STREAM_START': return 'activity-stream-start';
-      case 'STREAM_END': return 'activity-stream-end';
+      case 'START_RECORDING': return 'activity-stream-start';
+      case 'STOP_RECORDING': return 'activity-stream-end';
       default: return '';
     }
   };
@@ -98,8 +98,8 @@ function DeviceActivityModal({ isOpen, onClose, deviceType, deviceId }) {
       case 'ALARM_ON': return 'alert-on.png';
       case 'ALARM_OFF': return 'alert-off.png';
       case 'WARNING': return 'warning.png'
-      case 'STREAM_START': return '📹';
-      case 'STREAM_END': return '📷';
+      case 'START_RECORDING':return 'isRecording.png';
+      case 'STOP_RECORDING': return 'stop.png';
       default: return '📝';
     }
   };

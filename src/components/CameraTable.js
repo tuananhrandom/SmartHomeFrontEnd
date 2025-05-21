@@ -7,82 +7,108 @@ import CameraRecordingsModal from './CameraRecordingsModal';
 import useWebSocket from '../hooks/useWebSocket';
 import { BACKEND_URL } from '../config/api';
 import SchedulePopup from './SchedulePopup';
+import ShareCameraModal from './ShareCameraModal';
 
 function CameraTable() {
   const deviceType = "Camera";
-  const [isOpenEditPopup, setIsOpenEditPopup]=useState(false);
+  const [isOpenEditPopup, setIsOpenEditPopup] = useState(false);
   const [cameras, setCameras] = useState([]);
+  const [sharedCameras, setSharedCameras] = useState([]);
   const [isOpenActivityModal, setIsOpenActivityModal] = useState(false);
-  const [isOpenCameraView,setIsOpenCameraView] = useState(false);
+  const [isOpenCameraView, setIsOpenCameraView] = useState(false);
   const [isOpenRecordingsModal, setIsOpenRecordingsModal] = useState(false);
-  const [selectedCameraId,setSelectedCameraId] = useState('');
+  const [selectedCameraId, setSelectedCameraId] = useState('');
   const [isOpenSchedulePopup, setIsOpenSchedulePopup] = useState(false);
   const [isThisCameraRecording, setIsThisCameraRecording] = useState(false);
+  const [isSharedCamera, setIsSharedCamera] = useState(false);
   const { currentUser } = useAuth();
   const currentUserId = currentUser.userId;
+  const [isOpenShareModal, setIsOpenShareModal] = useState(false);
+  const token = localStorage.getItem("token");
 
-  // Sử dụng WebSocket để lắng nghe cập nhật về thiết bị đèn
+  // Sử dụng WebSocket để lắng nghe cập nhật về thiết bị camera
   const { isConnected, lastMessage, error: wsError } = useWebSocket({
     autoConnect: true,
     events: ['camera-update']
   });
+
   const handleEditPopup = (cameraId) => {
     setIsOpenEditPopup(true);
     setSelectedCameraId(cameraId);
   };
+
   const handleSchedulePopup = (cameraId) => {
     console.log('Schedule popup triggered for camera:', cameraId);
     setIsOpenSchedulePopup(true);
     setSelectedCameraId(cameraId);
   }
+
   const handleActivityModal = (cameraId) => {
     setIsOpenActivityModal(true);
     setSelectedCameraId(cameraId);
-  }
-  const handleOpenCameraView = (cameraId, isRecording) =>{
+  };
+
+  const handleOpenCameraView = (cameraId, isRecording, isShared = false) => {
     setIsOpenCameraView(true);
     setIsThisCameraRecording(isRecording);
     setSelectedCameraId(cameraId);
-  }
+    setIsSharedCamera(isShared);
+  };
+
   const handleOpenRecordingsModal = (cameraId) => {
     setIsOpenRecordingsModal(true);
     setSelectedCameraId(cameraId);
-  }
+  };
+
   const handleClosePopup = () => {
     setIsOpenCameraView(false);
     setIsOpenEditPopup(false);
     setIsOpenActivityModal(false);
     setIsOpenRecordingsModal(false);
     setIsOpenSchedulePopup(false);
+    setIsOpenShareModal(false);
   };
+
+  const handleOpenShareModal = (cameraId) => {
+    setIsOpenShareModal(true);
+    setSelectedCameraId(cameraId);
+  };
+
   useEffect(() => {
-
-    // Fetch cameras data
-    const fetchCameras = async () => {
-      try {
-        const response = await fetch(`${BACKEND_URL}/camera/${currentUserId}`);
-        if (response.ok) {
-          const data = await response.json();
-          if(data.length > 0){
-            setCameras(data);
-          }
-          else{
-            return(
-              <div>
-                <h1>No cameras found</h1>
-              </div>
-            )
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching cameras:', error);
-      }
-    };
-
     fetchCameras();
+    fetchSharedCameras();
   }, []);
-   // khi có sự kiện light-update thì cập nhật lại danh sách đèn
-   useEffect(() => {
+
+  const fetchCameras = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/camera/${currentUserId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setCameras(Array.isArray(data) ? data : []);
+      }
+    } catch (error) {
+      console.error('Error fetching cameras:', error);
+    }
+  };
+
+  const fetchSharedCameras = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/camera/shared-with-me`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setSharedCameras(Array.isArray(data) ? data : []);
+      }
+    } catch (error) {
+      console.error('Error fetching shared cameras:', error);
+    }
+  };
+
+  // khi có sự kiện light-update thì cập nhật lại danh sách đèn
+  useEffect(() => {
     if (lastMessage && lastMessage.type === 'camera-update') {
       // lấy về dữ liệu các đèn từ backend
       const fetchCameras = async () => {
@@ -108,6 +134,7 @@ function CameraTable() {
       fetchCameras()
     }
   }, [lastMessage]);
+
   const handleToggleRecord = async (cameraId) => {
     try {
       const response = await fetch(`${BACKEND_URL}/camera/toggle-record/${cameraId}`, {
@@ -181,12 +208,13 @@ function CameraTable() {
 
   return (
     <div>
-      {cameras.length === 0 ? (
+      {cameras.length === 0 && sharedCameras.length === 0 ? (
         <div className="row no-device">
           <div className="cell">⚠️ No Camera Found</div>
         </div>
       ) : (
         <>
+          {/* Hiển thị camera của người dùng */}
           {cameras.map(camera => (
             <div className="row" key={camera.cameraId} data-id={`camera-${camera.cameraId}`}>
               <div className="cell image" onClick={() => handleActivityModal(camera.cameraId)}>
@@ -236,7 +264,6 @@ function CameraTable() {
                     >
                       <img src='play.png' alt="stop record"/>
                     </button>
-                    
                   </>
                 )}
                 
@@ -250,7 +277,7 @@ function CameraTable() {
                     </button>
                   ) : (
                     <button
-                      className="action-button "
+                      className="action-button"
                       onClick={() => handleToggleRecord(camera.cameraId)}
                     >
                       <img src='startRecord.png' alt="start record"/>
@@ -258,10 +285,10 @@ function CameraTable() {
                   )
                 )}
                 <button
-                      className="action-button recordings"
-                      onClick={() => handleOpenRecordingsModal(camera.cameraId)}
-                    >
-                      <img src='list.png' alt="list"/>
+                  className="action-button recordings"
+                  onClick={() => handleOpenRecordingsModal(camera.cameraId)}
+                >
+                  <img src='list.png' alt="list"/>
                 </button>
                 {camera.cameraStatus != null && (
                   <button
@@ -272,6 +299,13 @@ function CameraTable() {
                     🕒
                   </button>
                 )}
+                <button
+                  className="action-button share"
+                  onClick={() => handleOpenShareModal(camera.cameraId)}
+                  title="Chia sẻ camera"
+                >
+                  <img src='share.png' alt="share"/>
+                </button>
               </div>
                 
               <div className="cell delete">
@@ -284,6 +318,48 @@ function CameraTable() {
               </div>
             </div>
           ))}
+
+          {/* Hiển thị camera được chia sẻ */}
+          {sharedCameras.length > 0 && (
+            <>
+              {/* <div className="row shared-camera-header">
+                <div className="cell">Camera được chia sẻ với tôi</div>
+              </div> */}
+              {sharedCameras.map(camera => (
+                <div className="row shared-camera" key={camera.cameraId} data-id={`shared-camera-${camera.cameraId}`}>
+                  <div className="cell image">
+                    {camera.cameraStatus === 1 && <img src="camera.png" alt="Camera" />}
+                    {camera.cameraStatus === 0 && <img src="camera-1.png" alt="Camera" />}
+                  </div>
+
+                  <div className="cell">
+                    {camera.cameraName}
+                    <span className="shared-badge">(Được chia sẻ)</span>
+                  </div>
+
+                  {/* <div className="cell id">ID: {camera.cameraId}</div> */}
+                  {/* <div className="cell ip">IP: {camera.cameraIp}</div> */}
+
+                  <div className="cell status">
+                    Status:
+                    {camera.cameraStatus === 1 && <span className="status-on">Online</span>}
+                    {camera.cameraStatus === 0 && <span className="status-on">Disconnected</span>}
+                  </div>
+
+                  <div className="cell action">
+                    {camera.cameraStatus === 1 && (
+                      <button
+                        className="action-button"
+                        onClick={() => handleOpenCameraView(camera.cameraId, false, true)}
+                      >
+                        <img src='play.png' alt="view camera"/>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
         </>
       )}
   
@@ -291,7 +367,8 @@ function CameraTable() {
         selectedCameraId={selectedCameraId}
         isOpen={isOpenCameraView}
         OnClose={handleClosePopup}
-        isRecording={isThisCameraRecording} 
+        isRecording={isThisCameraRecording}
+        isShared={isSharedCamera}
       />
   
       <EditDevicePopup
@@ -328,6 +405,13 @@ function CameraTable() {
           isRecording={isThisCameraRecording}
         />
       )}
+
+      <ShareCameraModal
+        isOpen={isOpenShareModal}
+        onClose={handleClosePopup}
+        cameraId={selectedCameraId}
+        token={token}
+      />
     </div>
   );
 }

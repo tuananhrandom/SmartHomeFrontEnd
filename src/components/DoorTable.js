@@ -170,7 +170,7 @@ function DoorTable() {
   const handleDeleteDoor = async (doorId) => {
     if(window.confirm("Bạn muốn loại bỏ thiết bị?")){
       try {
-        const response = await fetch(`${BACKEND_URL}/door/user/delete?doorId=${doorId}&userId=${currentUserId}`, {
+        const response = await fetch(`${BACKEND_URL}/door/delete/user?doorId=${doorId}&userId=${currentUserId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json'

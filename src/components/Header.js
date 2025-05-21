@@ -19,7 +19,6 @@ function Header() {
   const [showChangePassword, setShowChangePassword] = useState(false);
   const { currentUser } = useAuth();
   const currentUserId = currentUser?.userId;
-  console.log(currentUser);
 
   // Thêm state để theo dõi trạng thái đăng ký thông báo
   const [isPushEnabled, setIsPushEnabled] = useState(false);
